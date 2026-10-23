@@ -1,0 +1,54 @@
+{
+  "name": "Misión Saber 3° - Paleta Cósmica Matemáticas",
+  "version": "1.0.0",
+  "description": "Tokens de diseño y paleta de colores extraídos de la cabina espacial y cubos lúdicos de Misión Saber 3°",
+  "colors": {
+    "background": {
+      "spaceDark": { "value": "#180806", "type": "color", "comment": "Fondo profundo exterior / sombras de cabina" },
+      "cockpitDeep": { "value": "#2A0E08", "type": "color", "comment": "Suelo y paneles oscuros de la nave" },
+      "cockpitSurface": { "value": "rgba(42, 14, 8, 0.78)", "type": "color", "comment": "Superficies Glassmorphism con desenfoque" },
+      "ambientOrange": { "value": "#EF6026", "type": "color", "comment": "Luz ambiental cálida de la cabina espacial" },
+      "glowTangerine": { "value": "#FF8A3D", "type": "color", "comment": "Resplandor cálido de molduras y paneles" }
+    },
+    "cubes": {
+      "red": {
+        "base": { "value": "#F01F24", "type": "color", "comment": "Cubo Rojo Operaciones (+ / -)" },
+        "hover": { "value": "#FF383D", "type": "color" },
+        "glow": { "value": "rgba(240, 31, 36, 0.45)", "type": "color" }
+      },
+      "blue": {
+        "base": { "value": "#2D68B8", "type": "color", "comment": "Cubo Azul Multiplicación (×)" },
+        "hover": { "value": "#3B82F6", "type": "color" },
+        "glow": { "value": "rgba(45, 104, 184, 0.45)", "type": "color" }
+      },
+      "green": {
+        "base": { "value": "#5DC147", "type": "color", "comment": "Cubo Verde Numérico (5)" },
+        "hover": { "value": "#72D65C", "type": "color" },
+        "glow": { "value": "rgba(93, 193, 71, 0.45)", "type": "color" }
+      },
+      "amber": {
+        "base": { "value": "#F59E0B", "type": "color", "comment": "Cubo Amarillo/Ámbar Numérico (3 / 2)" },
+        "hover": { "value": "#FBBF24", "type": "color" },
+        "glow": { "value": "rgba(245, 158, 11, 0.45)", "type": "color" }
+      }
+    },
+    "accents": {
+      "magenta": {
+        "base": { "value": "#CB69A4", "type": "color", "comment": "Escuadra / Instrumento geométrico" },
+        "glow": { "value": "rgba(203, 105, 164, 0.45)", "type": "color" }
+      },
+      "cyan": {
+        "base": { "value": "#38BDF8", "type": "color", "comment": "Holograma / Gráfica de barras / Pedestal" },
+        "glow": { "value": "rgba(56, 189, 248, 0.5)", "type": "color" }
+      },
+      "gold": {
+        "base": { "value": "#FDE047", "type": "color", "comment": "Estrellas y símbolos radiantes" }
+      }
+    },
+    "text": {
+      "primary": { "value": "#FFFFFF", "type": "color", "comment": "Titulares / números neón iluminados" },
+      "secondary": { "value": "#FED7AA", "type": "color", "comment": "Textos secundarios con tinte cálido" },
+      "muted": { "value": "#BA7E6D", "type": "color", "comment": "Metadatos y etiquetas atenuadas" }
+    }
+  }
+}

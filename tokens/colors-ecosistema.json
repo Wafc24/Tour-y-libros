@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json.schemastore.org/design-tokens.json",
+  "name": "Design Tokens - Ecosistema Misión Saber (Colección Completa)",
+  "version": "1.0.0",
+  "description": "Sistema de tokens de color armonizado para todos los libros y tours pedagógicos de Misión Saber (3° Primaria, 9° Secundaria, 11° Tomos 1 y 2, y Física Cuántica).",
+  "tokens": {
+    "ecosistema": {
+      "background": {
+        "deep_void": { "value": "#0A0C12", "description": "Fondo ultra profundo del hub" },
+        "surface_card": { "value": "#151824", "description": "Superficie de tarjeta elevada" },
+        "surface_elevated": { "value": "rgba(26, 30, 44, 0.8)", "description": "Glassmorphism banner hero" },
+        "border_subtle": { "value": "rgba(255, 255, 255, 0.12)", "description": "Bisel de paneles" }
+      },
+      "aura": {
+        "space_indigo": { "value": "rgba(99, 102, 241, 0.22)", "description": "Resplandor ambiental Primaria (Grado 3°)" },
+        "secondary_emerald": { "value": "rgba(16, 185, 129, 0.16)", "description": "Resplandor ambiental Secundaria (Grado 9°)" },
+        "quantum_gold": { "value": "rgba(229, 178, 13, 0.20)", "description": "Resplandor ambiental Media Vocacional (Grado 11°)" }
+      }
+    },
+    "grado_3_primaria": {
+      "identity": "Espacial / SpaceGec / Exploración Cósmica",
+      "primary": { "value": "#6366F1", "description": "Índigo Cósmico principal" },
+      "primary_dark": { "value": "#4F46E5", "description": "Índigo Profundo para degradados y pins" },
+      "accent_starlight": { "value": "#38BDF8", "description": "Cian Estelar para bordes y halos de pulso" },
+      "nebula_violet": { "value": "#8B5CF6", "description": "Violeta de transición y badges" },
+      "card_surface": { "value": "rgba(22, 26, 45, 0.8)", "description": "Fondo de tarjeta 3° en el Hub" },
+      "card_border": { "value": "rgba(99, 102, 241, 0.35)", "description": "Borde interactivo" }
+    },
+    "grado_9_secundaria": {
+      "identity": "Científico / Biológico / Secundaria",
+      "primary": { "value": "#10B981", "description": "Esmeralda vivo principal" },
+      "primary_dark": { "value": "#059669", "description": "Verde bosque para CTA" },
+      "accent_teal": { "value": "#14B8A6", "description": "Turquesa para badges y acentos" },
+      "accent_lime": { "value": "#34D399", "description": "Verde menta brillante en hover" },
+      "card_surface": { "value": "rgba(16, 35, 30, 0.8)", "description": "Fondo de tarjeta 9° en el Hub" },
+      "card_border": { "value": "rgba(16, 185, 129, 0.35)", "description": "Borde interactivo" }
+    },
+    "grado_11_tomo_1": {
+      "identity": "Energía Nuclear / Reactor E=mc² / Pre-ICFES Saber 11°",
+      "primary_gold": { "value": "#E5B20D", "description": "Oro de Reactor cuántico" },
+      "bright_gold": { "value": "#FEF05B", "description": "Rayo brillante de foco, fórmula E=mc²" },
+      "amber_plasma": { "value": "#D97706", "description": "Plasma orbital y advertencias" },
+      "cockpit_carbon": { "value": "#161810", "description": "Fondo de blindaje de cabina" },
+      "card_border": { "value": "rgba(229, 178, 13, 0.38)", "description": "Borde dorado en el Hub" }
+    },
+    "grado_11_tomo_2": {
+      "identity": "Telemetría Digital / HUD Cuántico / Datos",
+      "primary_cyan": { "value": "#4FB2D2", "description": "Cian eléctrico de telemetría HUD" },
+      "deep_blue": { "value": "#0284C7", "description": "Azul eléctrico profundo de base" },
+      "cyan_light": { "value": "#BAE6FD", "description": "Resplandor holográfico y texto" },
+      "card_border": { "value": "rgba(79, 178, 210, 0.38)", "description": "Borde cian en el Hub" }
+    }
+  }
+}

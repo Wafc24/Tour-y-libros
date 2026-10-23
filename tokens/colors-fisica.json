@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json.schemastore.org/design-tokens.json",
+  "name": "Design Tokens - Misión Saber 11° Física",
+  "version": "1.0.0",
+  "description": "Sistema de tokens de color extraído de la portada de Física (E=mc²) Misión Saber 11°. Estética de energía cuántica, reactor nuclear, cabina sci-fi y telemetría digital.",
+  "tokens": {
+    "color": {
+      "background": {
+        "reactor_deep": {
+          "value": "#0A0B07",
+          "description": "Fondo más profundo de la sala del reactor / body principal"
+        },
+        "cockpit_carbon": {
+          "value": "#161810",
+          "description": "Superficies de tarjetas, paneles oscuros y contenedores"
+        },
+        "cockpit_elevated": {
+          "value": "#22261A",
+          "description": "Tarjetas elevadas, estados hover y capas intermedias"
+        },
+        "panel_border": {
+          "value": "rgba(226, 191, 62, 0.22)",
+          "description": "Bisel de paneles con resplandor dorado sutil"
+        }
+      },
+      "energy": {
+        "gold_bright": {
+          "value": "#FEF05B",
+          "description": "Rayo cuántico E=mc², núcleo atómico brillante y hotspots pulsantes"
+        },
+        "gold_primary": {
+          "value": "#E5B20D",
+          "description": "Botones de acción principal (CTA), números y titulares destacados"
+        },
+        "amber_plasma": {
+          "value": "#D97706",
+          "description": "Anillos orbitales de plasma, alertas y pistas metacognitivas"
+        },
+        "core_white": {
+          "value": "#FCFDF4",
+          "description": "Fórmulas matemáticas y texto de máximo contraste"
+        }
+      },
+      "telemetry": {
+        "hud_cyan": {
+          "value": "#4FB2D2",
+          "description": "Pantallas holográficas de telemetría y recuadro MISIÓN SABER 11°"
+        },
+        "hud_cyan_glow": {
+          "value": "rgba(79, 178, 210, 0.35)",
+          "description": "Resplandor cian para instrumentos y datos experimentales"
+        },
+        "hud_cyan_dark": {
+          "value": "#155E75",
+          "description": "Bordes de cápsulas de indagación y variables científicas"
+        }
+      },
+      "typography": {
+        "pure_white": {
+          "value": "#FFFFFF",
+          "description": "Titulares principales y números sobre esferas"
+        },
+        "gold_light": {
+          "value": "#FEF9C3",
+          "description": "Párrafos de lectura pedagógica de alta legibilidad"
+        },
+        "dim_gold": {
+          "value": "#A1A17A",
+          "description": "Metadatos, etiquetas secundarias y textos de apoyo"
+        }
+      }
+    }
+  }
+}

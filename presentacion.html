@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tour Guiado Pedagógico • Misión Saber 3° Matemáticas</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES GLOBALES OBLIGATORIAS (PALETA OFICIAL MATEMÁTICAS)
+       ========================================================================== */
+    :root {
+      /* ========================================================================
+         PALETA OFICIAL ECOSISTEMA MISIÓN SABER (Adobe Color Swatch)
+         ======================================================================== */
+      --color-slate-bg: #29313E;    /* RGB(41, 49, 62)   - Pizarra Azul Medianoche (Fondo Principal) */
+      --color-cyan:     #2FAECF;    /* RGB(47, 174, 207) - Azul Cian Eléctrico / Cerúleo */
+      --color-yellow:   #FFCB3F;    /* RGB(255, 203, 63) - Amarillo Dorado / Ámbar Brillante */
+      --color-cream:    #FBE6C0;    /* RGB(251, 230, 192)- Crema Cálido / Vainilla Suave */
+      --color-coral:    #D04931;    /* RGB(208, 73, 49)  - Terracota / Rojo Coral Vibrante */
+
+      --palette-pink: var(--color-coral);
+      --palette-orange: var(--color-coral);
+      --palette-yellow: var(--color-yellow);
+      --palette-green: var(--color-cyan);
+      --palette-lavender: var(--color-cream);
+      --palette-cyan: var(--color-cyan);
+
+      --btn-cube-red: var(--color-coral);
+      --btn-cube-blue: var(--color-cyan);
+      --btn-cube-green: var(--color-cyan);
+      --btn-cube-amber: var(--color-yellow);
+      --accent-magenta: var(--color-coral);
+      --accent-cyan: var(--color-cyan);
+      --bg-space-dark: #29313E;
+      --bg-cockpit-deep: #1E2530;
+      --ambient-orange: var(--color-yellow);
+      --ambient-tangerine: var(--color-coral);
+      --text-white: #FFFFFF;
+      --text-warm-light: #FBE6C0;
+
+      /* Tokens funcionales de interfaz Glassmorphism */
+      --bg-glass-panel: rgba(36, 44, 56, 0.90);
+      --border-cockpit: rgba(251, 230, 192, 0.20);
+      --border-cockpit-bright: rgba(47, 174, 207, 0.65);
+      --shadow-cockpit: 0 20px 50px rgba(0, 0, 0, 0.85);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+      --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-space-dark);
+      background-image: 
+        radial-gradient(circle at 50% 20%, rgba(47, 174, 207, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 10% 75%, rgba(208, 73, 49, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(255, 203, 63, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 15%, rgba(251, 230, 192, 0.10) 0%, transparent 45%),
+        linear-gradient(180deg, #1D232C 0%, var(--bg-space-dark) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-warm-light);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================================================
+       CABECERA DE LA NAVE CON STEPPER DE FASES
+       ========================================================================== */
+    header.main-header {
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-cockpit);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(30, 37, 48, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-cube-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--btn-cube-red), var(--ambient-orange));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: var(--text-white);
+      box-shadow: 0 0 18px rgba(240, 31, 36, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--btn-cube-blue);
+      color: var(--text-white);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .brand-subtitle {
+      font-size: 0.85rem;
+      color: var(--ambient-tangerine);
+      margin-top: 2px;
+    }
+
+    /* Stepper de Fases */
+    .phase-stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .phase-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-cockpit);
+      color: var(--text-warm-light);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .phase-btn:hover {
+      background: rgba(239, 96, 38, 0.2);
+      border-color: var(--ambient-orange);
+      color: var(--text-white);
+    }
+
+    .phase-btn.active {
+      background: linear-gradient(135deg, var(--btn-cube-red), var(--ambient-orange));
+      color: var(--text-white);
+      border-color: #ffffff;
+      box-shadow: 0 0 18px rgba(240, 31, 36, 0.65);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       ESCENARIO PRINCIPAL (50% / 50%)
+       ========================================================================== */
+    main.tour-stage {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding: 24px 32px;
+      max-width: 1720px;
+      width: 100%;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+
+    /* ==========================================================================
+       COLUMNA IZQUIERDA: PÁGINA DEL LIBRO CON PUNTOS CALIENTES
+       ========================================================================== */
+    .page-viewer-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    /* Barra de pestañas para alternar páginas dentro de una misma fase */
+    .page-subtabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(36, 11, 7, 0.8);
+      padding: 5px 12px;
+      border-radius: 30px;
+      border: 1px solid var(--border-cockpit);
+    }
+
+    .page-subtab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-warm-light);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-subtab-btn:hover {
+      color: var(--text-white);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .page-subtab-btn.active {
+      background: var(--btn-cube-blue);
+      color: var(--text-white);
+      box-shadow: 0 0 12px rgba(45, 104, 184, 0.5);
+    }
+
+    .page-card {
+      position: relative;
+      background: var(--bg-glass-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-cockpit);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      box-shadow: var(--shadow-cockpit);
+      max-height: calc(100vh - 195px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .page-image-wrapper {
+      position: relative;
+      display: inline-block;
+      max-height: calc(100vh - 220px);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.3, 1), transform-origin 0.55s cubic-bezier(0.2, 0.9, 0.3, 1);
+      transform-origin: center center;
+      will-change: transform, transform-origin;
+      cursor: zoom-in;
+    }
+
+    .page-image-wrapper.is-zoomed {
+      cursor: zoom-out;
+    }
+
+    .page-image-wrapper img {
+      display: block;
+      max-height: calc(100vh - 220px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+      transition: opacity 0.28s ease;
+    }
+
+    /* Controles flotantes de zoom de sección */
+    .zoom-controls-overlay {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .btn-zoom-toggle {
+      pointer-events: auto;
+      background: rgba(24, 8, 6, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-cockpit-bright);
+      color: var(--text-white);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      transition: var(--transition);
+    }
+
+    .btn-zoom-toggle:hover {
+      background: var(--ambient-orange);
+      border-color: #ffffff;
+      transform: scale(1.05);
+      box-shadow: 0 0 16px var(--ambient-orange);
+    }
+
+    .btn-zoom-toggle.active {
+      border-color: var(--btn-cube-green);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(93, 193, 71, 0.5);
+    }
+
+    /* Reducir tamaño de hotspots cuando la sección está ampliada para no tapar texto */
+    .page-image-wrapper.is-zoomed .hotspot {
+      transform: translate(-50%, -50%) scale(0.68);
+    }
+
+    .page-image-wrapper.is-zoomed .hotspot:hover {
+      transform: translate(-50%, -50%) scale(0.85);
+    }
+
+    .page-image-wrapper.is-zoomed .hotspot.active {
+      transform: translate(-50%, -50%) scale(0.85);
+      box-shadow: 0 0 20px rgba(93, 193, 71, 0.95);
+    }
+
+    /* Hotspots Circulares Numerados y Pulsantes */
+    .hotspot {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--btn-cube-red), var(--ambient-orange));
+      color: var(--text-white);
+      font-weight: 900;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      z-index: 10;
+      transition: transform 0.22s ease, background-color 0.22s ease;
+      animation: hotspotPulse 2.2s infinite;
+      box-shadow: 0 0 14px rgba(240, 31, 36, 0.75);
+    }
+
+    .hotspot:hover {
+      transform: translate(-50%, -50%) scale(1.22);
+      background: linear-gradient(135deg, var(--btn-cube-amber), #ffffff);
+      color: #3b1704;
+      animation: none;
+    }
+
+    .hotspot.active {
+      background: linear-gradient(135deg, var(--btn-cube-green), #a7f3d0);
+      border-color: #ffffff;
+      color: #064e3b;
+      transform: translate(-50%, -50%) scale(1.28);
+      box-shadow: 0 0 24px rgba(93, 193, 71, 0.9);
+      animation: activeGreenPulse 1.8s infinite;
+    }
+
+    @keyframes hotspotPulse {
+      0% { box-shadow: 0 0 0 0 rgba(240, 31, 36, 0.8); }
+      70% { box-shadow: 0 0 0 18px rgba(240, 31, 36, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(240, 31, 36, 0); }
+    }
+
+    @keyframes activeGreenPulse {
+      0% { box-shadow: 0 0 0 0 rgba(93, 193, 71, 0.9); }
+      70% { box-shadow: 0 0 0 20px rgba(93, 193, 71, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(93, 193, 71, 0); }
+    }
+
+    .hotspot::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(24, 8, 6, 0.95);
+      backdrop-filter: blur(8px);
+      color: var(--text-white);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-cockpit-bright);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+    }
+
+    .hotspot:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    /* ==========================================================================
+       COLUMNA DERECHA: TARJETA DE PROPÓSITO, DIÁLOGO Y PUNTOS CLAVE
+       ========================================================================== */
+    .explanation-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    /* 1. Cuadro de Propósito Pedagógico (Solicitado encima de la explicación) */
+    .purpose-card {
+      background: linear-gradient(135deg, rgba(62, 22, 13, 0.85), rgba(42, 14, 8, 0.9));
+      border: 1px solid var(--ambient-orange);
+      border-left: 5px solid var(--btn-cube-red);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+    }
+
+    .purpose-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--ambient-tangerine);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .purpose-text {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--text-white);
+      font-weight: 500;
+    }
+
+    /* 2. Panel Glassmorphism Principal */
+    .glass-cockpit-panel {
+      background: var(--bg-glass-panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-cockpit);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-cockpit);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+    }
+
+    .panel-meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-cockpit);
+      padding-bottom: 12px;
+    }
+
+    .fase-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-white);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .fase-indicator .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--btn-cube-red);
+      box-shadow: 0 0 10px var(--btn-cube-red);
+    }
+
+    .page-indicator-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-warm-light);
+      background: rgba(239, 96, 38, 0.18);
+      border: 1px solid var(--border-cockpit);
+      padding: 3px 12px;
+      border-radius: 12px;
+    }
+
+    /* Fila del Avatar y Diálogo */
+    .avatar-dialogue-row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .avatar-box {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar-halo {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--btn-cube-red), var(--ambient-orange), var(--btn-cube-amber));
+      box-shadow: 0 0 22px rgba(239, 96, 38, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #140503;
+      transition: transform 0.3s ease;
+    }
+
+    .avatar-box:hover .avatar-img {
+      transform: scale(1.08);
+    }
+
+    .avatar-name {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--text-white);
+    }
+
+    .avatar-role {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ambient-tangerine);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .dialogue-card {
+      flex: 1;
+      background: var(--bg-cockpit-deep);
+      border: 1px solid var(--border-cockpit-bright);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .dialogue-card::before {
+      content: "";
+      position: absolute;
+      top: 30px;
+      left: -9px;
+      width: 16px;
+      height: 16px;
+      background: var(--bg-cockpit-deep);
+      border-left: 1px solid var(--border-cockpit-bright);
+      border-bottom: 1px solid var(--border-cockpit-bright);
+      transform: rotate(45deg);
+    }
+
+    .dialogue-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-white);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dialogue-text {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-warm-light);
+      min-height: 80px;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Lista interactiva de los puntos de la fase */
+    .hotspots-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    /* Scrollbar personalizada para el panel */
+    .hotspots-selector::-webkit-scrollbar {
+      width: 6px;
+    }
+    .hotspots-selector::-webkit-scrollbar-thumb {
+      background: var(--border-cockpit);
+      border-radius: 3px;
+    }
+
+    .hotspot-card-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-cockpit);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      color: var(--text-warm-light);
+      transition: var(--transition);
+      text-align: left;
+    }
+
+    .hotspot-card-btn:hover {
+      background: rgba(239, 96, 38, 0.16);
+      color: var(--text-white);
+      border-color: var(--ambient-orange);
+    }
+
+    .hotspot-card-btn.active {
+      background: rgba(240, 31, 36, 0.2);
+      border-color: var(--btn-cube-red);
+      color: var(--text-white);
+    }
+
+    .hotspot-card-btn .badge-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .hotspot-card-btn.active .badge-num {
+      background: var(--btn-cube-red);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(240, 31, 36, 0.6);
+    }
+
+    .hotspot-card-btn .card-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .hotspot-card-btn .card-page-ref {
+      font-size: 0.75rem;
+      color: var(--ambient-tangerine);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* Barra de Navegación */
+    .navigation-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-cockpit);
+    }
+
+    .btn-nav {
+      background: var(--btn-cube-blue);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: var(--text-white);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      box-shadow: 0 4px 14px rgba(45, 104, 184, 0.4);
+    }
+
+    .btn-nav:hover:not(:disabled) {
+      background: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(45, 104, 184, 0.65);
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-autoplay {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--btn-cube-amber);
+      color: var(--btn-cube-amber);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-autoplay:hover {
+      background: var(--btn-cube-amber);
+      color: #3b1704;
+    }
+
+    .btn-autoplay.playing {
+      background: var(--btn-cube-green);
+      color: #064e3b;
+      border-color: var(--btn-cube-green);
+      box-shadow: 0 0 14px rgba(93, 193, 71, 0.6);
+    }
+
+    .step-counter {
+      font-size: 0.85rem;
+      color: var(--ambient-tangerine);
+      font-weight: 700;
+    }
+
+    @media (max-width: 1024px) {
+      main.tour-stage {
+        grid-template-columns: 1fr;
+        padding: 14px;
+      }
+      .page-card { max-height: 520px; }
+      .page-image-wrapper img { max-height: 480px; }
+      header.main-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado con Stepper de Fases -->
+  <header class="main-header">
+    <div class="brand-group">
+      <div class="brand-cube-icon">M³</div>
+      <div>
+        <h1 class="brand-title">
+          Misión Saber 3° • Matemáticas 
+          <span class="brand-badge">Tour Guiado</span>
+        </h1>
+        <p class="brand-subtitle">Explicaciones Pedagógicas por Fase • Misión Espacial Gamificada</p>
+      </div>
+    </div>
+
+    <!-- Stepper de las 4 Fases Pedagógicas -->
+    <nav class="phase-stepper" id="phase-stepper">
+      <button class="phase-btn active" data-phase-index="0">Fase 1: Comando (180-181)</button>
+      <button class="phase-btn" data-phase-index="1">Fase 2: Simulador (182)</button>
+      <button class="phase-btn" data-phase-index="2">Fase 3: Exploración (183-195)</button>
+      <button class="phase-btn" data-phase-index="3">Fase 4: Avances (196-198)</button>
+    </nav>
+
+    <!-- Enlaces al Ecosistema y otros recursos -->
+    <div class="header-nav-actions" style="display: flex; align-items: center; gap: 8px;">
+      <a href="index.html#hub" class="phase-btn" title="Ir al Centro de Control del Ecosistema" style="background: linear-gradient(135deg, var(--color-coral), #E65A40); border: 1px solid var(--color-yellow); color: #ffffff; text-decoration: none; font-weight: 800; box-shadow: 0 0 16px rgba(208, 73, 49, 0.45);">
+        <span>🚀 Ecosistema</span>
+      </a>
+      <a href="index.html#revista/ms3" class="phase-btn" title="Abrir en Visor Revista 3D" style="background: rgba(47, 174, 207, 0.12); border-color: rgba(47, 174, 207, 0.35); color: var(--color-cream); text-decoration: none;">
+        <span>📖 Revista 3D</span>
+      </a>
+      <a href="presentacion_fisica.html" class="phase-btn" title="Ir al Tour de 11° Física" style="background: rgba(255, 203, 63, 0.15); border-color: var(--color-yellow); color: var(--color-yellow); text-decoration: none;">
+        <span>⚡ Tour Física 11°</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Escenario de Dos Columnas (50% / 50%) -->
+  <main class="tour-stage">
+
+    <!-- COLUMNA IZQUIERDA: PÁGINA DEL LIBRO CON HOTSPOTS -->
+    <section class="page-viewer-column">
+      <!-- Barra para alternar páginas dentro de la fase activa -->
+      <div class="page-subtabs-bar" id="page-subtabs-bar"></div>
+
+      <div class="page-card" id="page-card">
+        <div class="page-image-wrapper" id="page-image-wrapper" title="Haz clic en la página para acercar o alejar">
+          <img id="current-page-img" src="Page/page_180.jpg" alt="Página de Matemáticas" onerror="this.src='pages/page_180.jpg'">
+          <div id="hotspots-container"></div>
+        </div>
+
+        <!-- Botón flotante para alternar / restablecer zoom de sección -->
+        <div class="zoom-controls-overlay">
+          <button id="btn-toggle-zoom" class="btn-zoom-toggle active" title="Alternar entre ampliar la sección enfocada o ver la página completa (Tecla Z)">
+            <span class="zoom-icon">🔍</span>
+            <span id="zoom-toggle-text">Ampliando sección</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA: PROPÓSITO, AVATAR Y DIÁLOGO EXPLICATIVO -->
+    <section class="explanation-column">
+
+      <!-- Cuadro de Propósito Pedagógico (ubicado encima) -->
+      <div class="purpose-card" id="purpose-card">
+        <div class="purpose-header">
+          <span>🎯 Propósito Pedagógico de la Fase</span>
+        </div>
+        <div class="purpose-text" id="purpose-text">
+          Contextualizar el aprendizaje, motivar al estudiante y activar sus presaberes antes de abordar los conceptos formales de matemáticas.
+        </div>
+      </div>
+
+      <!-- Panel Glassmorphism de la Cabina -->
+      <div class="glass-cockpit-panel">
+        
+        <div class="panel-meta-bar">
+          <span class="fase-indicator" id="panel-fase-badge">
+            <span class="dot"></span>
+            Fase 1 • Centro de Comando
+          </span>
+          <span class="page-indicator-badge" id="panel-page-num">Página 180</span>
+        </div>
+
+        <!-- Fila de Avatar y Diálogo -->
+        <div class="avatar-dialogue-row">
+          <div class="avatar-box">
+            <div class="avatar-halo">
+              <img id="avatar-img" class="avatar-img" src="assets/avatar_nino.png" alt="Avatar Astronauta" onerror="this.src='avatar_nino.png'">
+            </div>
+            <div class="avatar-name" id="avatar-name">Comandante Leo</div>
+            <div class="avatar-role" id="avatar-role">Guía de Misión</div>
+          </div>
+
+          <div class="dialogue-card">
+            <h2 class="dialogue-title" id="dialogue-title">1. El Título de Misión</h2>
+            <p class="dialogue-text" id="dialogue-text">
+              Convierte la clase de matemáticas en una misión espacial donde el estudiante es el protagonista (comandante).
+            </p>
+          </div>
+        </div>
+
+        <!-- Selector interactivo de puntos calientes de la fase -->
+        <div class="hotspots-selector" id="hotspots-selector"></div>
+
+        <!-- Barra de navegación inferior -->
+        <footer class="navigation-bar">
+          <button class="btn-nav" id="btn-prev" disabled>
+            <span>&larr;</span> Anterior
+          </button>
+
+          <button class="btn-autoplay" id="btn-autoplay" title="Avanzar automáticamente cada 6.5 segundos">
+            <span id="autoplay-icon">▶</span> Tour Automático
+          </button>
+
+          <span class="step-counter" id="step-counter">Punto 1 de 8</span>
+
+          <button class="btn-nav" id="btn-next">
+            Siguiente <span>&rarr;</span>
+          </button>
+        </footer>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       DATOS PEDAGÓGICOS RIGUROSOS Y CONTROLADOR JS
+       ========================================================================== -->
+  <script>
+    /**
+     * ESTRUCTURA PEDAGÓGICA RIGUROSA DE MATEMÁTICAS (4 FASES Y SUS PUNTOS CLAVE)
+     */
+    const PHASES_DATA = [
+      {
+        id: "fase1",
+        name: "Fase 1: Centro de Comando",
+        badge: "Fase 1 • Centro de Comando (Págs. 180 - 181)",
+        purpose: "Contextualizar el aprendizaje, motivar al estudiante y activar sus presaberes antes de abordar los conceptos formales de matemáticas.",
+        pages: [
+          {
+            pageNumber: 180,
+            imageSrc: "Page/page_180.jpg",
+            fallbackSrc: "pages/page_180.jpg",
+            label: "Pág. 180 (Puntos 1 al 5)"
+          },
+          {
+            pageNumber: 181,
+            imageSrc: "Page/page_181.jpg",
+            fallbackSrc: "pages/page_181.jpg",
+            label: "Pág. 181 (Puntos 6 al 8)"
+          }
+        ],
+        avatar: {
+          name: "Comandante Leo",
+          role: "Líder de Misión",
+          src: "assets/avatar_nino.png",
+          fallback: "avatar_nino.png"
+        },
+        items: [
+          {
+            num: 1,
+            pageNumber: 180,
+            top: 42,
+            left: 20,
+            shortLabel: "1. Título de Misión",
+            title: "1. El Título de Misión (Activando el sistema de navegación matemático)",
+            text: "Rompe con el esquema tradicional de 'Unidad 1'. Convierte la clase de matemáticas en una misión espacial donde el estudiante es el protagonista (comandante)."
+          },
+          {
+            num: 2,
+            pageNumber: 180,
+            top: 45,
+            left: 54,
+            shortLabel: "2. ¿Cuál es nuestro desafío?",
+            title: "2. ¿Cuál es nuestro desafío?",
+            text: "Presenta el problema a resolver. Conecta las matemáticas con situaciones concretas (organizar información, reconocer patrones, analizar señales) en lugar de presentar números aislados."
+          },
+          {
+            num: 3,
+            pageNumber: 180,
+            top: 65,
+            left: 54,
+            shortLabel: "3. Reto de la Misión",
+            title: "3. Reto de la Misión",
+            text: "Es el objetivo de aprendizaje planteado como una meta alcanzable (crear un mapa del planeta usando datos y patrones). Le da sentido a todo lo que se hará en la unidad."
+          },
+          {
+            num: 4,
+            pageNumber: 180,
+            top: 80,
+            left: 33,
+            shortLabel: "4. Cápsula ECO",
+            title: "4. Cápsula ECO",
+            text: "Espacio vital para la educación socioemocional. En matemáticas, la frustración es común. Aquí se enseña a identificar emociones y valorar las ideas de los compañeros al resolver problemas."
+          },
+          {
+            num: 5,
+            pageNumber: 180,
+            top: 80,
+            left: 10,
+            shortLabel: "5. Conexión Space-Gec",
+            title: "5. Conexión Space-Gec",
+            text: "Integración inmediata del ecosistema digital. El estudiante es invitado a ampliar la narrativa espacial mediante un video interactivo, uniendo el libro físico con la plataforma."
+          },
+          {
+            num: 6,
+            pageNumber: 181,
+            top: 20,
+            left: 35,
+            shortLabel: "6. Actividad Diagnóstico",
+            title: "6. Actividad Diagnóstico (Despegamos... ¿Qué sabemos?)",
+            text: "No es un examen punitivo. Es un 'calentamiento' cognitivo (ej. comparar y ordenar números en meteoritos) para que el docente identifique cómo llegan los estudiantes."
+          },
+          {
+            num: 7,
+            pageNumber: 181,
+            top: 52,
+            left: 30,
+            shortLabel: "7. Diccionario de la Misión",
+            title: "7. Diccionario de la Misión",
+            text: "Estandarización del lenguaje matemático. Conceptos clave (número, patrón, secuencia) definidos de forma sencilla para que todos hablen el mismo idioma durante la misión."
+          },
+          {
+            num: 8,
+            pageNumber: 181,
+            top: 48,
+            left: 74,
+            shortLabel: "8. Navegando por la Misión",
+            title: "8. Navegando por la Misión",
+            text: "Un mapa de ruta. Le explica al estudiante (y al docente) qué pasará en cada una de las 4 fases de la unidad, promoviendo la autonomía y la organización."
+          }
+        ]
+      },
+      {
+        id: "fase2",
+        name: "Fase 2: Simulador de Vuelo",
+        badge: "Fase 2 • Simulador de Vuelo (Pág. 182)",
+        purpose: "Enseñar explícitamente el razonamiento metacognitivo para resolver problemas tipo prueba estandarizada (ICFES Saber).",
+        pages: [
+          {
+            pageNumber: 182,
+            imageSrc: "Page/page_182.jpg",
+            fallbackSrc: "pages/page_182.jpg",
+            label: "Pág. 182 (Puntos 1 y 2)"
+          }
+        ],
+        avatar: {
+          name: "Científica Maya",
+          role: "Especialista Metacognitiva",
+          src: "assets/avatar_nina.png",
+          fallback: "avatar_nina.png"
+        },
+        items: [
+          {
+            num: 1,
+            pageNumber: 182,
+            top: 28,
+            left: 50,
+            shortLabel: "1. Pilota tu conocimiento",
+            title: "1. Pilota tu conocimiento (Las 4 Reglas de Oro)",
+            text: "Enseña el 'cómo pensar':\n• Lupa (Identifica): Comprender qué pide el problema.\n• Brújula (Rastrea): Buscar los datos útiles (números, patrones).\n• Cerebro (Activa): Elegir la operación o estrategia matemática adecuada.\n• Aterrizaje (Responde): Comprobar la respuesta y argumentar por qué es correcta."
+          },
+          {
+            num: 2,
+            pageNumber: 182,
+            top: 64,
+            left: 50,
+            shortLabel: "2. Punto de Control Modelado",
+            title: "2. Punto de Control Modelado",
+            text: "No se le pide al estudiante que resuelva solo todavía. El libro le muestra un ítem real (una secuencia numérica) y desglosa frente a él cómo se aplican los 4 pasos anteriores para llegar a la respuesta correcta de forma estructurada."
+          }
+        ]
+      },
+      {
+        id: "fase3",
+        name: "Fase 3: Exploración de la Misión",
+        badge: "Fase 3 • Exploración de la Misión (Págs. 183 y 195)",
+        purpose: "Desarrollo del componente disciplinar mediante la conceptualización, la práctica (taller) y la evaluación formativa.",
+        pages: [
+          {
+            pageNumber: 183,
+            imageSrc: "Page/page_183.jpg",
+            fallbackSrc: "pages/page_183.jpg",
+            label: "Pág. 183 (Puntos 1 al 6)"
+          },
+          {
+            pageNumber: 195,
+            imageSrc: "Page/page_195.jpg",
+            fallbackSrc: "pages/page_195.jpg",
+            label: "Pág. 195 (Punto 7: Control Reforzado)"
+          }
+        ],
+        avatar: {
+          name: "Comandante Leo",
+          role: "Explorador de Campo",
+          src: "assets/avatar_nino.png",
+          fallback: "avatar_nino.png"
+        },
+        items: [
+          {
+            num: 1,
+            pageNumber: 183,
+            top: 15,
+            left: 24,
+            shortLabel: "1. Numérico - Variacional",
+            title: "1. Numérico - Variacional",
+            text: "Identificación clara del componente evaluado por el ICFES que se está trabajando."
+          },
+          {
+            num: 2,
+            pageNumber: 183,
+            top: 32,
+            left: 36,
+            shortLabel: "2. Observando el Planeta",
+            title: "2. Observando el Planeta (Conceptualización)",
+            text: "La teoría matemática no es árida; se presenta integrada a la narrativa de la misión (ej. el extraterrestre que compara cantidades de cristales de energía)."
+          },
+          {
+            num: 3,
+            pageNumber: 183,
+            top: 56,
+            left: 28,
+            shortLabel: "3. Punto de Control",
+            title: "3. Punto de Control",
+            text: "Una pregunta tipo Saber intercalada en el aprendizaje. Exige que el estudiante aplique lo aprendido de inmediato y justifique su respuesta, fomentando la argumentación matemática (Competencia: Formulación y Ejecución / Argumentación)."
+          },
+          {
+            num: 4,
+            pageNumber: 183,
+            top: 53,
+            left: 72,
+            shortLabel: "4. Manos a la obra",
+            title: "4. Manos a la obra",
+            text: "La sección práctica de la clase. Ejercicios donde el estudiante actúa como 'detective' o constructor, aplicando la suma, la multiplicación o la comparación de números con objetos tangibles (tapas, semillas)."
+          },
+          {
+            num: 5,
+            pageNumber: 183,
+            top: 86,
+            left: 72,
+            shortLabel: "5. Laboratorio en Casa",
+            title: "5. Laboratorio en Casa",
+            text: "Extiende el aprendizaje fuera del aula, involucrando a la familia con materiales cotidianos (recipientes y semillas) para afianzar conceptos como la adición."
+          },
+          {
+            num: 6,
+            pageNumber: 183,
+            top: 88,
+            left: 32,
+            shortLabel: "6. Datos de la Misión",
+            title: "6. Datos de la Misión",
+            text: "Datos curiosos que conectan la matemática abstracta con el mundo real o el contexto espacial (ej. cómo los astronautas gestionan recursos sumando cantidades)."
+          },
+          {
+            num: 7,
+            pageNumber: 195,
+            top: 13,
+            left: 50,
+            shortLabel: "7. Punto de Control Reforzado",
+            title: "7. Punto de Control Reforzado (Pág. 195)",
+            text: "Batería de 7 preguntas tipo Saber (opción múltiple) al final de la fase 3. Evalúan los aprendizajes acumulados, marcando explícitamente qué competencia miden (Interpretación y Representación, Formulación y Ejecución, Argumentación)."
+          }
+        ]
+      },
+      {
+        id: "fase4",
+        name: "Fase 4: Informando Avances",
+        badge: "Fase 4 • Informando Avances (Págs. 196 y 198)",
+        purpose: "Consolidación final, evaluación sumativa (simulacro) y cierre del ciclo de aprendizaje.",
+        pages: [
+          {
+            pageNumber: 196,
+            imageSrc: "Page/page_196.jpg",
+            fallbackSrc: "pages/page_196.jpg",
+            label: "Pág. 196 (Puntos 1 y 2)"
+          },
+          {
+            pageNumber: 198,
+            imageSrc: "Page/page_198.jpg",
+            fallbackSrc: "pages/page_198.jpg",
+            label: "Pág. 198 (Puntos 3 y 4)"
+          }
+        ],
+        avatar: {
+          name: "Científica Maya",
+          role: "Evaluadora Pedagógica",
+          src: "assets/avatar_nina.png",
+          fallback: "avatar_nina.png"
+        },
+        items: [
+          {
+            num: 1,
+            pageNumber: 196,
+            top: 36,
+            left: 45,
+            shortLabel: "1. Proyecto final",
+            title: "1. Proyecto final",
+            text: "Se menciona la socialización en la plataforma digital. Es el espacio para que el trabajo individual se convierta en una construcción colectiva."
+          },
+          {
+            num: 2,
+            pageNumber: 196,
+            top: 58,
+            left: 45,
+            shortLabel: "2. Prueba de Campo (10 preguntas)",
+            title: "2. Prueba de Campo (10 preguntas)",
+            text: "Un mini-simulacro riguroso diseñado bajo la Estructura Basada en Evidencias (EBE) del ICFES. El estudiante se enfrenta a un cuadernillo real donde debe rellenar óvalos, manejando tiempos y lectura de contextos matemáticos."
+          },
+          {
+            num: 3,
+            pageNumber: 198,
+            top: 68,
+            left: 52,
+            shortLabel: "3. Conexión SpaceGec (Profundización)",
+            title: "3. Conexión SpaceGec (Profundización)",
+            text: "El libro físico llega a su límite, pero el aprendizaje continúa. Se remite al estudiante a la plataforma para resolver 15 preguntas adicionales, generando analítica de datos para el docente."
+          },
+          {
+            num: 4,
+            pageNumber: 198,
+            top: 82,
+            left: 50,
+            shortLabel: "4. Finalización de la Misión",
+            title: "4. Finalización de la Misión",
+            text: "Un cierre narrativo que celebra el esfuerzo del estudiante y lo deja en suspenso y motivado para el próximo desafío (la siguiente misión/unidad)."
+          }
+        ]
+      }
+    ];
+
+    /**
+     * GESTOR DEL TOUR GUIADO DE MATEMÁTICAS
+     */
+    class PedagogicalTourManager {
+      constructor(phasesData) {
+        this.phases = phasesData;
+        this.currentPhaseIndex = 0;
+        this.currentPageNumber = null;
+        this.activeItemNum = null;
+        this.isAutoplaying = false;
+        this.autoplayTimer = null;
+
+        // Elementos DOM
+        this.pageSubtabsBar = document.getElementById("page-subtabs-bar");
+        this.pageImg = document.getElementById("current-page-img");
+        this.pageImageWrapper = document.getElementById("page-image-wrapper");
+        this.btnToggleZoom = document.getElementById("btn-toggle-zoom");
+        this.zoomToggleText = document.getElementById("zoom-toggle-text");
+        this.isSectionZoomActive = true; // Zoom activo por defecto para enfocar cada punto al hacer clic
+        this.hotspotsContainer = document.getElementById("hotspots-container");
+        this.purposeText = document.getElementById("purpose-text");
+        this.panelFaseBadge = document.getElementById("panel-fase-badge");
+        this.panelPageNum = document.getElementById("panel-page-num");
+        this.avatarImg = document.getElementById("avatar-img");
+        this.avatarName = document.getElementById("avatar-name");
+        this.avatarRole = document.getElementById("avatar-role");
+        this.dialogueTitle = document.getElementById("dialogue-title");
+        this.dialogueText = document.getElementById("dialogue-text");
+        this.hotspotsSelector = document.getElementById("hotspots-selector");
+        this.btnPrev = document.getElementById("btn-prev");
+        this.btnNext = document.getElementById("btn-next");
+        this.btnAutoplay = document.getElementById("btn-autoplay");
+        this.autoplayIcon = document.getElementById("autoplay-icon");
+        this.stepCounter = document.getElementById("step-counter");
+        this.phaseButtons = document.querySelectorAll(".phase-btn");
+
+        this.init();
+      }
+
+      init() {
+        this.bindEvents();
+        this.loadPhase(0);
+      }
+
+      bindEvents() {
+        // Navegación por fases
+        this.phaseButtons.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const idx = parseInt(e.currentTarget.getAttribute("data-phase-index"), 10);
+            this.loadPhase(idx);
+          });
+        });
+
+        // Botones Anterior y Siguiente
+        this.btnPrev.addEventListener("click", () => this.navigateGlobalItem(-1));
+        this.btnNext.addEventListener("click", () => this.navigateGlobalItem(1));
+
+        // Botón para alternar zoom de sección / página completa
+        if (this.btnToggleZoom) {
+          this.btnToggleZoom.addEventListener("click", (e) => {
+            e.stopPropagation();
+            this.toggleSectionZoom();
+          });
+        }
+
+        // Clic en la imagen para acercar/alejar
+        if (this.pageImg) {
+          this.pageImg.addEventListener("click", () => {
+            this.toggleSectionZoom();
+          });
+        }
+
+        // Tour Automático
+        this.btnAutoplay.addEventListener("click", () => this.toggleAutoplay());
+
+        // Teclado
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") this.navigateGlobalItem(1);
+          if (e.key === "ArrowLeft") this.navigateGlobalItem(-1);
+          if (e.key === "z" || e.key === "Z") {
+            this.toggleSectionZoom();
+          }
+          if (e.key === "Escape" && this.isSectionZoomActive) {
+            this.isSectionZoomActive = false;
+            this.applyCurrentZoom();
+          }
+          if (e.key === " ") {
+            e.preventDefault();
+            this.toggleAutoplay();
+          }
+        });
+      }
+
+      getCurrentPhase() {
+        return this.phases[this.currentPhaseIndex];
+      }
+
+      loadPhase(phaseIndex, targetItemNum = null) {
+        this.currentPhaseIndex = phaseIndex;
+        const phase = this.getCurrentPhase();
+
+        // 1. Actualizar botones de fase
+        this.phaseButtons.forEach((btn, idx) => {
+          btn.classList.toggle("active", idx === phaseIndex);
+        });
+
+        // 2. Cuadro de Propósito Pedagógico (encima de la explicación)
+        this.purposeText.textContent = phase.purpose;
+
+        // 3. Avatar
+        this.avatarName.textContent = phase.avatar.name;
+        this.avatarRole.textContent = phase.avatar.role;
+        this.avatarImg.src = phase.avatar.src;
+        this.avatarImg.onerror = () => {
+          this.avatarImg.src = phase.avatar.fallback;
+        };
+
+        // 4. Renderizar pestañas de sub-páginas
+        this.renderPageSubtabs(phase.pages);
+
+        // 5. Determinar página inicial y punto inicial
+        const initialItem = targetItemNum 
+          ? phase.items.find(i => i.num === targetItemNum) 
+          : phase.items[0];
+
+        this.switchPage(initialItem.pageNumber, initialItem.num);
+
+        // 6. Renderizar selector de puntos en la columna derecha
+        this.renderItemsSelector(phase.items);
+      }
+
+      renderPageSubtabs(pages) {
+        this.pageSubtabsBar.innerHTML = "";
+        
+        // Si la fase solo tiene 1 página, mostramos la etiqueta
+        pages.forEach((p) => {
+          const btn = document.createElement("button");
+          btn.className = "page-subtab-btn";
+          btn.id = `subtab-p-${p.pageNumber}`;
+          btn.textContent = p.label;
+          btn.addEventListener("click", () => {
+            const firstItemOnPage = this.getCurrentPhase().items.find(i => i.pageNumber === p.pageNumber);
+            this.switchPage(p.pageNumber, firstItemOnPage ? firstItemOnPage.num : null);
+          });
+          this.pageSubtabsBar.appendChild(btn);
+        });
+      }
+
+      switchPage(pageNumber, focusItemNum = null) {
+        this.currentPageNumber = pageNumber;
+        const phase = this.getCurrentPhase();
+        const pageConfig = phase.pages.find(p => p.pageNumber === pageNumber);
+
+        // Cancelar temporizadores activos de zoom
+        clearTimeout(this.zoomStartTimer);
+        clearTimeout(this.zoomReturnTimer);
+
+        // Actualizar subtabs activas
+        document.querySelectorAll(".page-subtab-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.id === `subtab-p-${pageNumber}`);
+        });
+
+        // Asegurar que parta siempre de la hoja completa al 100%
+        if (this.pageImageWrapper) {
+          this.pageImageWrapper.classList.remove("is-zoomed");
+          this.pageImageWrapper.style.transform = "scale(1)";
+          this.pageImageWrapper.style.transformOrigin = "center center";
+        }
+
+        // Actualizar imagen con fade
+        this.pageImg.style.opacity = "0.2";
+        this.pageImg.src = pageConfig.imageSrc;
+        this.pageImg.onerror = () => {
+          this.pageImg.src = pageConfig.fallbackSrc;
+        };
+        this.pageImg.onload = () => {
+          this.pageImg.style.opacity = "1";
+        };
+
+        this.panelPageNum.textContent = `Página ${pageNumber} del libro`;
+        this.panelFaseBadge.innerHTML = `<span class="dot"></span> ${phase.badge}`;
+
+        // Renderizar puntos calientes de ESTA página específica
+        this.renderHotspotsForPage(pageNumber);
+
+        // Si se especificó un punto a enfocar
+        if (focusItemNum !== null) {
+          this.selectItem(focusItemNum);
+        } else {
+          const firstOnPage = phase.items.find(i => i.pageNumber === pageNumber);
+          if (firstOnPage) this.selectItem(firstOnPage.num);
+        }
+      }
+
+      renderHotspotsForPage(pageNumber) {
+        this.hotspotsContainer.innerHTML = "";
+        const phase = this.getCurrentPhase();
+        const pageItems = phase.items.filter(i => i.pageNumber === pageNumber);
+
+        pageItems.forEach((item) => {
+          const btn = document.createElement("button");
+          btn.className = "hotspot";
+          btn.id = `hotspot-${item.num}`;
+          btn.style.top = `${item.top}%`;
+          btn.style.left = `${item.left}%`;
+          btn.setAttribute("data-label", item.shortLabel);
+          btn.textContent = item.num;
+
+          btn.addEventListener("click", () => this.selectItem(item.num));
+          this.hotspotsContainer.appendChild(btn);
+        });
+      }
+
+      renderItemsSelector(items) {
+        this.hotspotsSelector.innerHTML = "";
+
+        items.forEach((item) => {
+          const card = document.createElement("button");
+          card.className = "hotspot-card-btn";
+          card.id = `item-card-${item.num}`;
+
+          card.innerHTML = `
+            <span class="badge-num">${item.num}</span>
+            <span class="card-label">${item.title}</span>
+            <span class="card-page-ref">Pág. ${item.pageNumber}</span>
+          `;
+
+          card.addEventListener("click", () => {
+            if (this.currentPageNumber !== item.pageNumber) {
+              this.switchPage(item.pageNumber, item.num);
+            } else {
+              this.selectItem(item.num);
+            }
+          });
+
+          this.hotspotsSelector.appendChild(card);
+        });
+      }
+
+      /**
+       * Ciclo de inspección solicitado:
+       * 1. Siempre se muestra la hoja completa.
+       * 2. A partir de ahí se amplía hacia la sección del punto seleccionado.
+       * 3. Vuelve y regresa automáticamente a la hoja principal.
+       */
+      triggerSectionInspection(item) {
+        if (!this.pageImageWrapper || !item) return;
+
+        // Limpiar temporizadores de animaciones previas
+        clearTimeout(this.zoomStartTimer);
+        clearTimeout(this.zoomReturnTimer);
+
+        // 1. Vista base: Hoja completa
+        this.pageImageWrapper.classList.remove("is-zoomed");
+        this.pageImageWrapper.style.transform = "scale(1)";
+        this.pageImageWrapper.style.transformOrigin = "center center";
+
+        if (this.zoomToggleText) {
+          this.zoomToggleText.innerHTML = `📄 Hoja completa • Enfocando punto ${item.num}...`;
+        }
+
+        // 2. A partir de la hoja completa, se amplía suavemente hacia la sección del punto
+        this.zoomStartTimer = setTimeout(() => {
+          this.pageImageWrapper.classList.add("is-zoomed");
+
+          const originX = Math.max(14, Math.min(86, item.left));
+          const originY = Math.max(14, Math.min(86, item.top));
+
+          this.pageImageWrapper.style.transformOrigin = `${originX}% ${originY}%`;
+          this.pageImageWrapper.style.transform = "scale(1.95)";
+
+          if (this.zoomToggleText) {
+            this.zoomToggleText.innerHTML = `🔍 Ampliando ${item.shortLabel} • Clic para volver`;
+          }
+          if (this.btnToggleZoom) {
+            this.btnToggleZoom.classList.add("active");
+          }
+
+          // 3. Tras mostrar el detalle de la sección, vuelve y regresa a la hoja principal
+          this.zoomReturnTimer = setTimeout(() => {
+            this.returnToFullPage();
+          }, 3800);
+        }, 220);
+      }
+
+      returnToFullPage() {
+        clearTimeout(this.zoomReturnTimer);
+        clearTimeout(this.zoomStartTimer);
+
+        if (!this.pageImageWrapper) return;
+
+        this.pageImageWrapper.classList.remove("is-zoomed");
+        this.pageImageWrapper.style.transform = "scale(1)";
+        this.pageImageWrapper.style.transformOrigin = "center center";
+
+        if (this.zoomToggleText) {
+          this.zoomToggleText.innerHTML = `📄 Hoja completa (100%)`;
+        }
+        if (this.btnToggleZoom) {
+          this.btnToggleZoom.classList.remove("active");
+        }
+      }
+
+      toggleSectionZoom() {
+        if (this.pageImageWrapper && this.pageImageWrapper.classList.contains("is-zoomed")) {
+          // Si está ampliado, regresar de inmediato a la hoja completa
+          this.returnToFullPage();
+        } else {
+          // Si está en hoja completa, reactivar la ampliación del punto actual
+          const phase = this.getCurrentPhase();
+          const item = phase.items.find(i => i.num === this.activeItemNum);
+          if (item) this.triggerSectionInspection(item);
+        }
+      }
+
+      selectItem(itemNum) {
+        const phase = this.getCurrentPhase();
+        const item = phase.items.find(i => i.num === itemNum);
+        if (!item) return;
+
+        // Si el item está en otra página de la fase, cambiamos la página primero
+        if (this.currentPageNumber !== item.pageNumber) {
+          this.switchPage(item.pageNumber, itemNum);
+          return;
+        }
+
+        this.activeItemNum = itemNum;
+
+        // Resaltar hotspot en la imagen
+        document.querySelectorAll(".hotspot").forEach((el) => {
+          el.classList.toggle("active", el.id === `hotspot-${itemNum}`);
+        });
+
+        // Resaltar tarjeta en el selector
+        document.querySelectorAll(".hotspot-card-btn").forEach((el) => {
+          el.classList.toggle("active", el.id === `item-card-${itemNum}`);
+        });
+
+        // Actualizar título y texto del diálogo
+        this.dialogueTitle.textContent = item.title;
+        
+        this.dialogueText.style.opacity = "0.2";
+        setTimeout(() => {
+          this.dialogueText.textContent = item.text;
+          this.dialogueText.style.opacity = "1";
+        }, 120);
+
+        // Disparar el ciclo: Hoja completa -> Amplía sección -> Regresa a hoja completa
+        this.triggerSectionInspection(item);
+
+        // Actualizar contador y botones
+        const currentItemIndex = phase.items.findIndex(i => i.num === itemNum);
+        this.stepCounter.textContent = `Punto ${itemNum} de ${phase.items.length} (Fase ${this.currentPhaseIndex + 1})`;
+
+        // Habilitar/deshabilitar anterior y siguiente global
+        const isFirstGlobal = this.currentPhaseIndex === 0 && currentItemIndex === 0;
+        const isLastGlobal = this.currentPhaseIndex === this.phases.length - 1 && currentItemIndex === phase.items.length - 1;
+
+        this.btnPrev.disabled = isFirstGlobal;
+        this.btnNext.disabled = isLastGlobal && !this.isAutoplaying;
+      }
+
+      navigateGlobalItem(direction) {
+        const phase = this.getCurrentPhase();
+        const currentIndex = phase.items.findIndex(i => i.num === this.activeItemNum);
+        const nextIndex = currentIndex + direction;
+
+        if (nextIndex >= 0 && nextIndex < phase.items.length) {
+          // Dentro de la misma fase
+          const targetItem = phase.items[nextIndex];
+          if (targetItem.pageNumber !== this.currentPageNumber) {
+            this.switchPage(targetItem.pageNumber, targetItem.num);
+          } else {
+            this.selectItem(targetItem.num);
+          }
+        } else if (direction > 0 && this.currentPhaseIndex < this.phases.length - 1) {
+          // Avanzar a la siguiente fase
+          this.loadPhase(this.currentPhaseIndex + 1);
+        } else if (direction < 0 && this.currentPhaseIndex > 0) {
+          // Retroceder a la fase previa (al último ítem)
+          const prevPhase = this.phases[this.currentPhaseIndex - 1];
+          const lastItem = prevPhase.items[prevPhase.items.length - 1];
+          this.loadPhase(this.currentPhaseIndex - 1, lastItem.num);
+        } else if (direction > 0 && this.isAutoplaying) {
+          // En autoplay, reiniciar al principio al llegar al final
+          this.loadPhase(0);
+        }
+      }
+
+      toggleAutoplay() {
+        this.isAutoplaying = !this.isAutoplaying;
+        this.btnAutoplay.classList.toggle("playing", this.isAutoplaying);
+        this.autoplayIcon.textContent = this.isAutoplaying ? "⏸" : "▶";
+
+        if (this.isAutoplaying) {
+          this.startAutoplayTimer();
+        } else {
+          clearInterval(this.autoplayTimer);
+        }
+      }
+
+      startAutoplayTimer() {
+        clearInterval(this.autoplayTimer);
+        this.autoplayTimer = setInterval(() => {
+          this.navigateGlobalItem(1);
+        }, 7000); // 7 segundos por punto pedagógico
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      window.tour = new PedagogicalTourManager(PHASES_DATA);
+    });
+  </script>
+
+</body>
+</html>

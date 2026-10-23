@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muestrario de Paleta y Tokens • Misión Saber 3°</title>
+  <link rel="stylesheet" href="css/theme-tokens.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--gradient-cockpit);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text-warm-light);
+      padding: 40px 24px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    header.demo-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-top {
+      background: var(--btn-cube-red);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 20px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 0 16px var(--btn-cube-red-glow);
+    }
+
+    h1.demo-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    p.demo-desc {
+      max-width: 680px;
+      color: var(--text-warm-light);
+      font-size: 1rem;
+    }
+
+    /* Muestras de color en cuadrícula */
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 4px;
+      height: 20px;
+      background: var(--btn-cube-amber);
+      border-radius: 2px;
+    }
+
+    .grid-swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .swatch-card {
+      background: var(--bg-cockpit-surface);
+      border: 1px solid var(--border-glass-warm);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      position: relative;
+    }
+
+    .swatch-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-glass-bright);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    }
+
+    .swatch-color {
+      height: 90px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .swatch-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .swatch-name {
+      font-weight: 700;
+      color: var(--text-white);
+      font-size: 0.95rem;
+    }
+
+    .swatch-token {
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--btn-cube-amber);
+    }
+
+    .swatch-hex {
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--text-warm-muted);
+    }
+
+    .copy-hint {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.7rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2px 6px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .swatch-card:hover .copy-hint {
+      opacity: 1;
+    }
+
+    /* Vitrina de Botones y Componentes Reales */
+    .showcase-panel {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .buttons-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    /* Comparador con la imagen de referencia */
+    .reference-split {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .reference-img {
+      width: 100%;
+      border-radius: 16px;
+      border: 2px solid var(--border-glass-warm);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    }
+
+    .toast-copy {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--btn-cube-green);
+      color: #0d3807;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 30px;
+      box-shadow: 0 4px 16px var(--btn-cube-green-glow);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .toast-copy.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 850px) {
+      .reference-split {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Encabezado -->
+    <header class="demo-header">
+      <span class="badge-top">Design Tokens System</span>
+      <h1 class="demo-title">Paleta Oficial • Misión Saber 3°</h1>
+      <p class="demo-desc">
+        Recursos cromáticos extraídos de la cabina espacial y los cubos de Matemáticas. Haz clic en cualquier tarjeta de color para copiar su variable CSS o código HEX al portapapeles.
+      </p>
+    </header>
+
+    <!-- Comparativa con la imagen original -->
+    <section class="glass-cockpit-panel showcase-panel reference-split">
+      <img src="assets/referencia_paleta.jpg" alt="Portada Matemáticas Misión Saber 3°" class="reference-img">
+      <div>
+        <h2 style="color: var(--text-white); font-size: 1.4rem; margin-bottom: 10px;">🎨 Origen de la Paleta</h2>
+        <p style="color: var(--text-warm-light); font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;">
+          Esta paleta combina la calidez inmersiva de la cabina de mando (tonos ámbar y mandarina espacial) con el dinamismo lúdico de los 4 cubos centrales que representan las matemáticas (Rojo para operaciones, Azul para multiplicación, Verde para números naturales y Ámbar para retos).
+        </p>
+        <p style="color: var(--text-warm-muted); font-size: 0.85rem;">
+          Archivo de tokens: <code>tokens/colors.json</code> | Hoja de estilos: <code>css/theme-tokens.css</code>
+        </p>
+      </div>
+    </section>
+
+    <!-- 1. Los 4 Cubos Centrales (Botones Principales) -->
+    <section>
+      <h2 class="section-title">1. Colores de Acción (Cubos Centrales)</h2>
+      <div class="grid-swatches">
+
+        <div class="swatch-card" onclick="copyToken('--btn-cube-red', '#F01F24')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: var(--gradient-btn-red); box-shadow: 0 0 20px var(--btn-cube-red-glow);">
+            + −
+          </div>
+          <div class="swatch-info">
+            <span class="swatch-name">Cubo Rojo (Operaciones)</span>
+            <span class="swatch-token">var(--btn-cube-red)</span>
+            <span class="swatch-hex">#F01F24 • Retos y Desafíos</span>
+          </div>
+        </div>
+
+        <div class="swatch-card" onclick="copyToken('--btn-cube-blue', '#2D68B8')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: var(--gradient-btn-blue); box-shadow: 0 0 20px var(--btn-cube-blue-glow);">
+            ×
+          </div>
+          <div class="swatch-info">
+            <span class="swatch-name">Cubo Azul (Multiplicación)</span>
+            <span class="swatch-token">var(--btn-cube-blue)</span>
+            <span class="swatch-hex">#2D68B8 • Ciencia y Enlaces</span>
+          </div>
+        </div>
+
+        <div class="swatch-card" onclick="copyToken('--btn-cube-green', '#5DC147')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: var(--gradient-btn-green); color: #0d3807; box-shadow: 0 0 20px var(--btn-cube-green-glow);">
+            5
+          </div>
+          <div class="swatch-info">
+            <span class="swatch-name">Cubo Verde (Numérico)</span>
+            <span class="swatch-token">var(--btn-cube-green)</span>
+            <span class="swatch-hex">#5DC147 • Éxito y Avances</span>
+          </div>
+        </div>
+
+        <div class="swatch-card" onclick="copyToken('--btn-cube-amber', '#F59E0B')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: var(--gradient-btn-amber); color: #5c3b02; box-shadow: 0 0 20px var(--btn-cube-amber-glow);">
+            3
+          </div>
+          <div class="swatch-info">
+            <span class="swatch-name">Cubo Ámbar (Saberes)</span>
+            <span class="swatch-token">var(--btn-cube-amber)</span>
+            <span class="swatch-hex">#F59E0B • Pistas y Alertas</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. Ambiente de Cabina y Fondos -->
+    <section>
+      <h2 class="section-title">2. Fondos e Iluminación de Cabina</h2>
+      <div class="grid-swatches">
+
+        <div class="swatch-card" onclick="copyToken('--bg-space-dark', '#180806')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: #180806;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Vacío Espacial Profundo</span>
+            <span class="swatch-token">var(--bg-space-dark)</span>
+            <span class="swatch-hex">#180806</span>
+          </div>
+        </div>
+
+        <div class="swatch-card" onclick="copyToken('--bg-cockpit-deep', '#2A0E08')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: #2a0e08;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Suelo de Cabina</span>
+            <span class="swatch-token">var(--bg-cockpit-deep)</span>
+            <span class="swatch-hex">#2A0E08</span>
+          </div>
+        </div>
+
+        <div class="swatch-card" onclick="copyToken('--ambient-orange', '#EF6026')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: #ef6026; box-shadow: 0 0 16px rgba(239, 96, 38, 0.5);"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Luz Cálida de Molduras</span>
+            <span class="swatch-token">var(--ambient-orange)</span>
+            <span class="swatch-hex">#EF6026</span>
+          </div>
+        </div>
+
+        <div class="swatch-card" onclick="copyToken('--accent-cyan', '#38BDF8')">
+          <span class="copy-hint">Copiar</span>
+          <div class="swatch-color" style="background: #38bdf8; box-shadow: 0 0 16px var(--accent-cyan-glow);"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Holograma / Rayo Luz</span>
+            <span class="swatch-token">var(--accent-cyan)</span>
+            <span class="swatch-hex">#38BDF8</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. Previsualización de Botones y Componentes Reales -->
+    <section>
+      <h2 class="section-title">3. Componentes en Vivo</h2>
+      <div class="glass-cockpit-panel showcase-panel">
+        <h3 style="color: var(--text-white); font-size: 1.1rem;">Botones Listos para Usar</h3>
+        <div class="buttons-row">
+          <button class="btn-space btn-cube-red">🚀 Desafío de Misión</button>
+          <button class="btn-space btn-cube-blue">🔬 Laboratorio de Ciencias</button>
+          <button class="btn-space btn-cube-green">✓ Validar Respuesta</button>
+          <button class="btn-space btn-cube-amber">💡 Pista Pedagógica</button>
+        </div>
+
+        <div style="border-top: 1px dashed var(--border-glass-warm); padding-top: 18px; margin-top: 6px;">
+          <h3 style="color: var(--text-white); font-size: 1.1rem; margin-bottom: 10px;">Ejemplo de Tarjeta de Misión</h3>
+          <div style="background: var(--bg-cockpit-card); border: 1px solid var(--border-glass-warm); border-radius: 12px; padding: 18px;">
+            <span style="background: rgba(240, 31, 36, 0.2); color: #ff6b4a; border: 1px solid var(--btn-cube-red-glow); padding: 3px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Módulo 1</span>
+            <h4 style="color: var(--text-white); margin-top: 8px; font-size: 1.1rem;">Exploradores de la Aritmética Espacial</h4>
+            <p style="color: var(--text-warm-light); font-size: 0.9rem; margin-top: 6px;">
+              Aprende a descomponer números y realizar operaciones combinadas guiado por los astronautas de la nave.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="toast" class="toast-copy">¡Copiado al portapapeles!</div>
+
+  <script>
+    function copyToken(token, hex) {
+      const textToCopy = `var(${token}); /* ${hex} */`;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const toast = document.getElementById("toast");
+        toast.textContent = `Copiado: ${token} (${hex})`;
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 1800);
+      });
+    }
+  </script>
+
+</body>
+</html>

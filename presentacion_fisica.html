@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tour Guiado Pedagógico • Misión Saber 11° Física</title>
+  <link rel="stylesheet" href="css/theme-fisica.css">
+  <style>
+    /* ==========================================================================
+       ESTILOS DEL TOUR GUIADO PEDAGÓGICO - FÍSICA 11°
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-reactor-deep);
+      background-image: 
+        radial-gradient(circle at 50% 20%, rgba(47, 174, 207, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 10% 75%, rgba(208, 73, 49, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(255, 203, 63, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 15%, rgba(251, 230, 192, 0.10) 0%, transparent 45%),
+        linear-gradient(180deg, #1D232C 0%, var(--bg-reactor-deep) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-gold-light);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Encabezado Superior */
+    header.main-header {
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--bg-panel-border);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(30, 37, 48, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-atom-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--energy-gold-primary), var(--energy-amber-plasma));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: #000000;
+      box-shadow: var(--glow-gold-sm);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-pure-white);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: rgba(79, 178, 210, 0.18);
+      border: 1px solid var(--hud-cyan-electric);
+      color: var(--hud-cyan-electric);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .formula-tag {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--energy-gold-bright);
+      background: rgba(254, 240, 91, 0.12);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(254, 240, 91, 0.3);
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-return-flipbook {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--bg-panel-border);
+      color: var(--text-gold-light);
+      padding: 7px 15px;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-return-flipbook:hover {
+      background: rgba(226, 191, 62, 0.15);
+      border-color: var(--energy-gold-primary);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: var(--glow-gold-sm);
+    }
+
+    /* Stepper de Pasos Pedagógicos */
+    nav.stepper-nav {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      padding: 14px 20px;
+      background: rgba(16, 18, 12, 0.65);
+      border-bottom: 1px solid rgba(226, 191, 62, 0.12);
+      backdrop-filter: blur(8px);
+      overflow-x: auto;
+    }
+
+    .step-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-cockpit-carbon);
+      border: 1px solid var(--bg-panel-border);
+      border-radius: 28px;
+      padding: 8px 18px;
+      color: var(--text-dim-gold);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .step-btn:hover {
+      border-color: var(--energy-gold-primary);
+      color: var(--text-pure-white);
+      transform: translateY(-2px);
+    }
+
+    .step-btn.active {
+      background: linear-gradient(135deg, rgba(229, 178, 13, 0.22), rgba(217, 119, 6, 0.18));
+      border-color: var(--energy-gold-bright);
+      color: var(--text-pure-white);
+      box-shadow: 0 0 20px rgba(254, 240, 91, 0.25);
+    }
+
+    .step-number-tag {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--energy-gold-primary);
+    }
+
+    .step-btn.active .step-number-tag {
+      background: var(--energy-gold-bright);
+      color: #000000;
+    }
+
+    /* Layout Principal Dividido 50% / 50% */
+    main.tour-container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 50% 50%;
+      gap: 28px;
+      padding: 24px 32px;
+      max-width: 1700px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* COLUMNA IZQUIERDA: Visor de Página y Zoom */
+    .viewport-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Barra de Sub-pestañas para multipágina */
+    .page-subtabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+      padding: 6px 12px;
+      background: rgba(22, 24, 16, 0.75);
+      border: 1px solid var(--bg-panel-border);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .page-subtab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dim-gold);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-subtab-btn:hover {
+      color: var(--energy-gold-bright);
+      background: rgba(254, 240, 91, 0.08);
+    }
+
+    .page-subtab-btn.active {
+      background: var(--energy-gold-primary);
+      color: #000000;
+      border-color: var(--energy-gold-bright);
+      box-shadow: 0 0 12px rgba(254, 240, 91, 0.35);
+    }
+
+    /* Contenedor del Libro con Soporte de Zoom */
+    .book-page-viewport {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 215px);
+      min-height: 580px;
+      background: #000000;
+      border-radius: 16px;
+      border: 1px solid var(--bg-panel-border);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+      transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
+    }
+
+    .page-image-wrapper.is-zoomed {
+      cursor: grab;
+    }
+
+    .book-page-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      border-radius: 4px;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Puntos Calientes (Hotspots) Cuánticos */
+    .hotspots-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .hotspot {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--energy-gold-primary), var(--energy-amber-plasma));
+      color: #000000;
+      font-weight: 900;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      pointer-events: auto;
+      z-index: 10;
+      transition: transform 0.22s ease, background-color 0.22s ease;
+      animation: goldPulse 2.2s infinite;
+      box-shadow: 0 0 16px rgba(254, 240, 91, 0.65);
+    }
+
+    .hotspot:hover {
+      transform: translate(-50%, -50%) scale(1.25);
+      background: var(--energy-gold-bright);
+      color: #000000;
+      animation: none;
+      box-shadow: var(--glow-gold-lg);
+    }
+
+    .hotspot.active {
+      background: #ffffff;
+      border-color: var(--hud-cyan-electric);
+      color: #000000;
+      transform: translate(-50%, -50%) scale(1.3);
+      box-shadow: 0 0 25px rgba(79, 178, 210, 0.95);
+      animation: activeCyanPulse 1.8s infinite;
+    }
+
+    @keyframes goldPulse {
+      0% { box-shadow: 0 0 0 0 rgba(254, 240, 91, 0.8); }
+      70% { box-shadow: 0 0 0 18px rgba(254, 240, 91, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(254, 240, 91, 0); }
+    }
+
+    @keyframes activeCyanPulse {
+      0% { box-shadow: 0 0 0 0 rgba(79, 178, 210, 0.9); }
+      70% { box-shadow: 0 0 0 20px rgba(79, 178, 210, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(79, 178, 210, 0); }
+    }
+
+    .hotspot::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 11, 7, 0.95);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--energy-gold-primary);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+    }
+
+    .hotspot:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    /* Botón de control de Zoom en el visor */
+    .zoom-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .zoom-mode-text {
+      font-size: 0.78rem;
+      color: var(--text-dim-gold);
+    }
+
+    .btn-zoom-reset {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--bg-panel-border);
+      color: var(--text-gold-light);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-zoom-reset:hover {
+      background: rgba(226, 191, 62, 0.15);
+      border-color: var(--energy-gold-primary);
+    }
+
+    /* COLUMNA DERECHA: Propósito, Selector y Explicaciones */
+    .explanation-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: calc(100vh - 165px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    /* 1. Cuadro de Propósito Pedagógico (Obligatorio arriba) */
+    .purpose-card {
+      background: linear-gradient(135deg, rgba(22, 24, 16, 0.95), rgba(15, 17, 10, 0.98));
+      border: 1px solid var(--bg-panel-border-bright);
+      border-left: 5px solid var(--energy-gold-primary);
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      flex-shrink: 0;
+    }
+
+    .purpose-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--energy-gold-bright);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .purpose-text {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: var(--text-pure-white);
+      font-weight: 500;
+    }
+
+    /* 2. Selector de Puntos Rápidos (Grid de botones) */
+    .points-selector-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: var(--bg-cockpit-carbon);
+      border: 1px solid var(--bg-panel-border);
+      border-radius: 14px;
+      padding: 14px;
+      backdrop-filter: blur(12px);
+      flex-shrink: 0;
+    }
+
+    .points-selector-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--hud-cyan-electric);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .points-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
+    }
+
+    .point-card-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--text-gold-light);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .point-card-btn:hover {
+      background: rgba(226, 191, 62, 0.12);
+      border-color: var(--energy-gold-primary);
+      transform: translateX(2px);
+    }
+
+    .point-card-btn.active {
+      background: linear-gradient(135deg, rgba(229, 178, 13, 0.25), rgba(79, 178, 210, 0.15));
+      border-color: var(--energy-gold-bright);
+      color: var(--text-pure-white);
+      box-shadow: 0 0 14px rgba(254, 240, 91, 0.25);
+    }
+
+    .point-num-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--energy-gold-primary);
+      color: #000000;
+      font-size: 0.75rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .point-card-btn.active .point-num-badge {
+      background: var(--energy-gold-bright);
+      box-shadow: 0 0 8px var(--energy-gold-bright);
+    }
+
+    .point-card-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .point-page-tag {
+      font-size: 0.68rem;
+      color: var(--text-dim-gold);
+    }
+
+    /* 3. Panel de Detalle Pedagógico Activo */
+    .detail-card {
+      background: var(--bg-cockpit-carbon);
+      border: 1px solid var(--bg-panel-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .detail-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+
+    .detail-number-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .detail-circle-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--energy-gold-primary), var(--energy-amber-plasma));
+      color: #000000;
+      font-size: 1.1rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--glow-gold-sm);
+    }
+
+    .detail-heading {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-pure-white);
+    }
+
+    .detail-page-ref {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--hud-cyan-electric);
+      background: rgba(79, 178, 210, 0.12);
+      border: 1px solid rgba(79, 178, 210, 0.3);
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .detail-explanation {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-gold-light);
+    }
+
+    .detail-pedagogy-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(79, 178, 210, 0.25);
+      border-left: 4px solid var(--hud-cyan-electric);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 6px;
+    }
+
+    .pedagogy-title {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--hud-cyan-electric);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .pedagogy-text {
+      font-size: 0.85rem;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .btn-focus-action {
+      align-self: flex-start;
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--energy-gold-primary), #ca8a04);
+      color: #000000;
+      border: 1px solid var(--energy-gold-bright);
+      padding: 9px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(226, 191, 62, 0.35);
+    }
+
+    .btn-focus-action:hover {
+      background: var(--energy-gold-bright);
+      transform: translateY(-2px);
+      box-shadow: var(--glow-gold-lg);
+    }
+
+    /* Badges de Fórmulas Matemáticas Elegantes (Sin LaTeX Crudo) */
+    .math-badge {
+      display: inline-block;
+      font-family: "Cambria Math", "Georgia", "Times New Roman", serif;
+      font-weight: 700;
+      color: #FEF05B;
+      background: rgba(254, 240, 91, 0.15);
+      border: 1px solid rgba(254, 240, 91, 0.4);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin: 0 2px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    /* Scrollbar estilizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(226, 191, 62, 0.3);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--energy-gold-primary);
+    }
+
+    @media (max-width: 1024px) {
+      main.tour-container {
+        grid-template-columns: 1fr;
+      }
+      .book-page-viewport {
+        height: 65vh;
+      }
+      .explanation-column {
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado Superior -->
+  <header class="main-header">
+    <div class="brand-group">
+      <div class="brand-atom-icon">⚛</div>
+      <div>
+        <div class="brand-title">
+          <span>Tour Guiado Pedagógico • Física</span>
+          <span class="brand-badge">Misión Saber 11°</span>
+          <span class="formula-tag">E = mc²</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <a href="index.html#hub" class="btn-return-flipbook" title="Ir al Centro de Control del Ecosistema" style="background: linear-gradient(135deg, var(--energy-amber-plasma), #E65A40); border: 1px solid var(--energy-gold-bright); color: #ffffff; font-weight: 800; box-shadow: 0 0 16px rgba(208, 73, 49, 0.45); text-decoration: none;">
+        <span>🚀 Ecosistema</span>
+      </a>
+      <a href="index.html#revista/ms11_t1" class="btn-return-flipbook" title="Volver al Visor de Revista Digital" style="background: rgba(47, 174, 207, 0.12); border-color: rgba(47, 174, 207, 0.35); color: var(--text-gold-light); text-decoration: none;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+        <span>Abrir en Revista (Flipbook)</span>
+      </a>
+      <a href="presentacion.html" class="btn-return-flipbook" title="Ir al Tour de 3° Matemáticas" style="background: rgba(255, 203, 63, 0.15); border-color: var(--energy-gold-bright); color: var(--energy-gold-bright); text-decoration: none;">
+        <span>📐 Tour Matemáticas 3°</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Stepper de Pasos Metodológicos de 11° -->
+  <nav class="stepper-nav" id="stepper-nav">
+    <!-- Generado dinámicamente -->
+  </nav>
+
+  <!-- Contenedor Principal (50% / 50%) -->
+  <main class="tour-container">
+
+    <!-- COLUMNA IZQUIERDA: Visor de Página y Zoom -->
+    <div class="viewport-column">
+      <!-- Selector de Sub-páginas del Paso Actual -->
+      <div class="page-subtabs-bar" id="page-subtabs-bar">
+        <!-- Renderizado dinámico -->
+      </div>
+
+      <!-- Viewport de la Página con Zoom -->
+      <div class="book-page-viewport" id="book-viewport">
+        <div class="page-image-wrapper" id="page-wrapper">
+          <img id="page-img" class="book-page-img" src="" alt="Página de Física 11°">
+          <div class="hotspots-overlay" id="hotspots-container">
+            <!-- Hotspots circulares inyectados dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Estado de Zoom -->
+      <div class="zoom-toolbar">
+        <span class="zoom-mode-text" id="zoom-status-text">📄 Hoja completa • Clic en un número para inspeccionar</span>
+        <button class="btn-zoom-reset" id="btn-zoom-reset">Restablecer Vista (100%)</button>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: Propósito y Explicaciones Pedagógicas -->
+    <div class="explanation-column">
+
+      <!-- 1. Cuadro de Propósito Pedagógico (Solicitado encima de la explicación) -->
+      <div class="purpose-card">
+        <div class="purpose-header">
+          <span>🎯</span>
+          <span id="purpose-step-badge">Propósito del Paso 1</span>
+        </div>
+        <div class="purpose-text" id="purpose-description">
+          Cargando propósito pedagógico...
+        </div>
+      </div>
+
+      <!-- 2. Selector Rápido de Puntos Clave del Paso -->
+      <div class="points-selector-box">
+        <div class="points-selector-title">
+          <span>Puntos Clave del Paso</span>
+          <span id="points-counter-tag">4 elementos</span>
+        </div>
+        <div class="points-grid" id="points-grid">
+          <!-- Tarjetas de puntos -->
+        </div>
+      </div>
+
+      <!-- 3. Tarjeta de Detalle del Punto Seleccionado -->
+      <div class="detail-card">
+        <div class="detail-top-row">
+          <div class="detail-number-title">
+            <div class="detail-circle-num" id="detail-num">1</div>
+            <div class="detail-heading" id="detail-title">Cargando...</div>
+          </div>
+          <div class="detail-page-ref" id="detail-page-ref">Pág. 208</div>
+        </div>
+
+        <div class="detail-explanation" id="detail-explanation">
+          Selecciona un punto en la hoja o en la lista superior para ver su análisis detallado.
+        </div>
+
+        <div class="detail-pedagogy-box">
+          <div class="pedagogy-title">💡 Enfoque ICFES Saber 11 y Mediación Docente:</div>
+          <div class="pedagogy-text" id="detail-pedagogy">
+            Explicación pedagógica orientada al docente y al desarrollo de competencias.
+          </div>
+        </div>
+
+        <button class="btn-focus-action" id="btn-focus-item">
+          <span>🔍 Enfocar en la Hoja (Zoom 1.95x)</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    /**
+     * Datos Maestros del Tour Pedagógico de Física 11° (Misión Saber 11)
+     * Estructurado por "Pasos" con coordenadas milimétricas exactas.
+     */
+    const FISICA_STEPS_DATA = [
+      {
+        id: "paso1",
+        stepNum: 1,
+        title: "Paso 1: Abordaje",
+        subtitle: "Abordaje de la Misión",
+        badge: "PASO 1 • ABORDAJE",
+        purpose: "Contextualizar el reto científico, delimitar el fenómeno físico a estudiar (Mecánica Clásica) y afianzar el lenguaje riguroso de variables antes de entrar al análisis matemático formal.",
+        pages: [
+          { pageNumber: 208, label: "Pág. 208 • Abordaje, Glosario y Compendio", imageSrc: "books/ms11_tomo1/page_208.jpg" }
+        ],
+        items: [
+          {
+            num: 1,
+            pageNumber: 208,
+            title: "Título de la Misión: Mecánica Clásica",
+            shortLabel: "Título Misión",
+            top: 12.6,
+            left: 28.0,
+            explanation: "Delimita el campo de la Mecánica Clásica conectando la física newtoniana con situaciones reales de la tecnología, la cinemática y la dinámica, superando la visión abstracta y memorística de la materia.",
+            pedagogy: "Permite al docente situar el marco epistémico: la física de 11° no evalúa memorizar fórmulas, sino comprender los principios que gobiernan el movimiento y la conservación de la energía en el universo."
+          },
+          {
+            num: 2,
+            pageNumber: 208,
+            title: "Objetivo Formativo de la Misión",
+            shortLabel: "Objetivo Formativo",
+            top: 17.5,
+            left: 28.0,
+            explanation: "Declara de manera explícita el estándar del ICFES a desarrollar: reconocer preguntas investigables, plantear procedimientos experimentales adecuados e interpretar datos y gráficas derivadas de experimentos sencillos.",
+            pedagogy: "Alinea la expectativa de aprendizaje entre el docente y el estudiante. El estudiante comprende desde el primer minuto bajo qué criterios de competencia será evaluado en la prueba Saber 11."
+          },
+          {
+            num: 3,
+            pageNumber: 208,
+            title: "Glosario para la Misión (Indagación)",
+            shortLabel: "Glosario Misión",
+            top: 28.7,
+            left: 34.0,
+            explanation: "Estandarización de conceptos clave: define formalmente la 'Indagación Científica', el diseño experimental y la recolección de evidencia para homogeneizar el vocabulario técnico.",
+            pedagogy: "Elimina la ambigüedad conceptual. El estudiante de 11° debe dominar la distinción entre observación empírica y modelo científico explicativo."
+          },
+          {
+            num: 4,
+            pageNumber: 208,
+            title: "Compendio de la Misión (Mecánica y MRUA)",
+            shortLabel: "Compendio Misión",
+            top: 55.0,
+            left: 31.0,
+            explanation: "La mecánica clásica estudia cómo se mueven los cuerpos y las fuerzas que influyen en ese movimiento. El MRUA describe desplazamientos en línea recta con aceleración constante. En caída libre la magnitud de la aceleración es g; en un plano inclinado sin rozamiento es a = g · sen(θ). Comprender estos movimientos requiere observar, formular hipótesis y analizar datos para explicar cómo y por qué cambia la velocidad.",
+            pedagogy: "Orienta el aprendizaje hacia la comprensión de conceptos y modelos científicos, superando el enfoque tradicional de mecanización de fórmulas matemáticas."
+          },
+          {
+            num: 5,
+            pageNumber: 208,
+            title: "Conexión SpaceGec (Diagnóstico en Línea)",
+            shortLabel: "Conexión SpaceGec",
+            top: 75.0,
+            left: 13.5,
+            explanation: "Integración con el ecosistema digital: remite al estudiante a ingresar a la plataforma virtual para completar su prueba de diagnóstico inicial desde casa.",
+            pedagogy: "Permite al docente obtener analítica de datos en tiempo real sobre los presaberes de los estudiantes antes de iniciar las clases presenciales."
+          }
+        ]
+      },
+      {
+        id: "paso2",
+        stepNum: 2,
+        title: "Paso 2: Entrenamiento",
+        subtitle: "Zona de Entrenamiento ICFES",
+        badge: "PASO 2 • ENTRENAMIENTO",
+        purpose: "Entrenar el razonamiento metacognitivo frente a preguntas tipo Saber 11, enseñando al estudiante a rastrear pistas en el texto, anticipar patrones y analizar la anatomía de la clave frente a los distractores.",
+        pages: [
+          { pageNumber: 209, label: "Pág. 209 • Pregunta Modelo", imageSrc: "books/ms11_tomo1/page_209.jpg" },
+          { pageNumber: 210, label: "Pág. 210 • Reto de Competencias", imageSrc: "books/ms11_tomo1/page_210.jpg" },
+          { pageNumber: 211, label: "Pág. 211 • Anatomía de la Clave", imageSrc: "books/ms11_tomo1/page_211.jpg" }
+        ],
+        items: [
+          {
+            num: 1,
+            pageNumber: 209,
+            title: "Ficha Técnica Saber (Componente y Evidencia)",
+            shortLabel: "Ficha Técnica",
+            top: 21.5,
+            left: 12.5,
+            explanation: "Muestra explícitamente: Componente Físico (Mecánica Clásica), Competencia (Indagación) y la Evidencia evaluada (Interpreta y analiza datos representados en texto, gráficas, diagramas o tablas).",
+            pedagogy: "Desmitifica la prueba estandarizada. El estudiante aprende a 'leer como el evaluador', comprendiendo la estructura de la matriz de competencias del ICFES."
+          },
+          {
+            num: 2,
+            pageNumber: 209,
+            title: "Pregunta Modelo (Laboratorio y Datos Experimentales)",
+            shortLabel: "Pregunta Modelo",
+            top: 15.0,
+            left: 16.5,
+            explanation: "Situación problema real: tres estudiantes investigan en el laboratorio cómo influye el ángulo de inclinación en la aceleración de un bloque (15°, 30°, 45°) midiendo tiempos de recorrido de 1 m (2.9 s, 1.8 s, 1.4 s). Un estudiante afirma: 'La aceleración aumenta al aumentar el ángulo del plano'. ¿Cuál es el procedimiento más adecuado para comprobarlo?",
+            pedagogy: "Modela la lectura comprensiva de situaciones experimentales tipo ICFES donde se debe evaluar la coherencia metodológica de una comprobación empírica."
+          },
+          {
+            num: 3,
+            pageNumber: 209,
+            title: "Avatar Guía (Orientación Metacognitiva)",
+            shortLabel: "Avatar Guía",
+            top: 16.0,
+            left: 70.0,
+            explanation: "Instrucción del avatar: 'Antes de elegir la opción definitiva, verifiquemos si tu hipótesis es correcta. Avanza a las siguientes actividades, donde encontrarás la información esencial para sustentar tu respuesta con evidencia'.",
+            pedagogy: "Promueve la pausa reflexiva y la autorregulación: enseña a no responder impulsivamente y a buscar evidencia antes de tomar una decisión."
+          },
+          {
+            num: 4,
+            pageNumber: 209,
+            title: "Apuntes para la Misión (Pistas y Recursos Clave)",
+            shortLabel: "Apuntes de Misión",
+            top: 36.2,
+            left: 60.0,
+            explanation: "Caja de herramientas de lectura rápida: rastreo de pistas (si piden predecir o comprobar es indagación), errores comunes (cambiar más de una variable a la vez) y recursos clave (fórmulas a = 2d / t² y a = g · sen(θ)).",
+            pedagogy: "Herramienta de andamiaje cognitivo que ayuda al estudiante a filtrar distractores procedimentales."
+          },
+          {
+            num: 5,
+            pageNumber: 210,
+            title: "Actividad 1: Reto de Competencias",
+            shortLabel: "Actividad 1",
+            top: 10.4,
+            left: 17.0,
+            explanation: "Ejercicio guiado para aprender a reconocer las preguntas de indagación, identificando cuáles piden comprobar hipótesis o proponer procedimientos versus aquellas de cálculo directo.",
+            pedagogy: "Entrena al estudiante para identificar la intención evaluativa de cada ítem de la prueba Saber 11."
+          },
+          {
+            num: 6,
+            pageNumber: 210,
+            title: "Actividad 2: Predice el Patrón",
+            shortLabel: "Actividad 2",
+            top: 62.4,
+            left: 17.0,
+            explanation: "A partir de una tabla de datos experimentales (20°: 2.6 s, 40°: 1.9 s, 50°: 1.6 s), el estudiante predice si para 60° el tiempo será mayor o menor a 1.6 s y diseña cómo comprobarlo experimentalmente.",
+            pedagogy: "Desarrolla la competencia de predicción y extrapolación de regularidades científicas a partir de evidencia experimental."
+          },
+          {
+            num: 7,
+            pageNumber: 211,
+            title: "Avatar de la Página 211 (Del Análisis a la Decisión)",
+            shortLabel: "Avatar Pág. 211",
+            top: 11.5,
+            left: 20.0,
+            explanation: "Mensaje motivador del avatar: 'Estás a punto de completar la Zona de entrenamiento y ya tienes lo necesario para descubrir la solución. Ahora analizarás la anatomía de la respuesta para comprender por qué una opción es correcta y cómo evitar los distractores'.",
+            pedagogy: "Refuerza la autoeficacia y prepara la transición hacia el análisis metacognitivo de opciones."
+          },
+          {
+            num: 8,
+            pageNumber: 211,
+            title: "Anatomía de la Respuesta (5 Pasos Metacognitivos)",
+            shortLabel: "Anatomía Respuesta",
+            top: 21.5,
+            left: 16.5,
+            explanation: "Desglose sistemático de los 5 pasos: Paso 1 (Reconoce el fenómeno o modelo), Paso 2 (Ubica la relación causa-efecto), Paso 3 (Conecta conceptos conocidos), Paso 4 (Evalúa críticamente opciones) y Paso 5 (Verifica la lógica completa).",
+            pedagogy: "Estructura el proceso de pensamiento que un estudiante de alto puntaje aplica de forma sistemática frente a cualquier ítem complejo."
+          },
+          {
+            num: 9,
+            pageNumber: 211,
+            title: "Análisis de la Clave Correcta y Distractores",
+            shortLabel: "Análisis de la Clave",
+            top: 26.0,
+            left: 12.0,
+            explanation: "La opción A es la clave correcta: calcular la aceleración usando los datos de tiempo existentes con a = 2d / t² confirma la hipótesis sin añadir variables. Se descartan B (la masa es irrelevante), C (la velocidad inicial es cero) y D (cambiar el material altera el rozamiento, invalidando el experimento).",
+            pedagogy: "Enseña la técnica del descarte fundamentado: comprender por qué cada distractor es una trampa conceptual típica del examen de Estado."
+          },
+          {
+            num: 10,
+            pageNumber: 211,
+            title: "Del Análisis a la Decisión (Decidir con Evidencias)",
+            shortLabel: "Del Análisis a Decisión",
+            top: 53.7,
+            left: 18.0,
+            explanation: "Cierre metodológico: este tipo de preguntas no busca repetir fórmulas de memoria, sino analizar la información para descubrir relaciones entre datos y conceptos, y decidir con base en evidencias.",
+            pedagogy: "Sintetiza la competencia de indagación: la ciencia es un proceso de toma de decisiones argumentadas a partir de pruebas empíricas."
+          }
+        ]
+      },
+      {
+        id: "paso3",
+        stepNum: 3,
+        title: "Paso 3: Bitácora",
+        subtitle: "Bitácora Conceptual y Aula",
+        badge: "PASO 3 • BITÁCORA",
+        purpose: "Desarrollar el componente disciplinar formal: estructurar los modelos teóricos de la mecánica (cinemática, dinámica y vectores) articulados a la resolución paso a paso y la experimentación en aula.",
+        pages: [
+          { pageNumber: 212, label: "Pág. 212 • Cinemática y Dinámica", imageSrc: "books/ms11_tomo1/page_212.jpg" },
+          { pageNumber: 213, label: "Pág. 213 • Caída Libre y Gravedad", imageSrc: "books/ms11_tomo1/page_213.jpg" },
+          { pageNumber: 214, label: "Pág. 214 • Actividad en el Aula", imageSrc: "books/ms11_tomo1/page_214.jpg" }
+        ],
+        items: [
+          {
+            num: 1,
+            pageNumber: 212,
+            title: "Paso 3: Bitácora de la Misión (Mecánica Clásica)",
+            shortLabel: "Bitácora Misión",
+            top: 21.5,
+            left: 12.0,
+            explanation: "Introducción conceptual al estudio de por qué y cómo se mueven los cuerpos: desde la descripción geométrica del movimiento hasta las causas (fuerzas y masa).",
+            pedagogy: "Establece la narrativa disciplinar: la bitácora es el cuaderno de campo del científico donde se registran leyes universales que rigen desde satélites hasta vehículos."
+          },
+          {
+            num: 2,
+            pageNumber: 212,
+            title: "Pilar 1: Movimiento Rectilíneo Uniforme y Acelerado",
+            shortLabel: "Pilar 1: MRU / MRUA",
+            top: 53.5,
+            left: 12.0,
+            explanation: "Sistematización de ecuaciones de movimiento: velocidad constante vs. aceleración constante, junto con la interpretación de pendientes en gráficas de posición y velocidad.",
+            pedagogy: "Prepara para la lectura de gráficas: la pendiente de posición-tiempo es la velocidad, y la pendiente de velocidad-tiempo es la aceleración."
+          },
+          {
+            num: 3,
+            pageNumber: 213,
+            title: "Pilar 2: Caída Libre y Aceleración Gravitatoria",
+            shortLabel: "Pilar 2: Gravedad",
+            top: 10.5,
+            left: 12.0,
+            explanation: "Análisis del caso particular donde la aceleración es debida exclusivamente a la atracción gravitatoria terrestre (g ≈ 9.8 m/s²), independiente de la masa del objeto.",
+            pedagogy: "Corrige una idea previa errónea muy arraigada: los cuerpos pesados NO caen más rápido en el vacío; la aceleración gravitatoria es universal para todos."
+          },
+          {
+            num: 4,
+            pageNumber: 213,
+            title: "Cálculos Paso a Paso: Análisis Cuantitativo",
+            shortLabel: "Cálculos Paso a Paso",
+            top: 10.5,
+            left: 56.0,
+            explanation: "Ejemplo modelado de cálculo de velocidad de impacto y tiempo de vuelo (v = v₀ + gt, y = 20 - 4.9(1.0)² = 15.1 m), demostrando cómo sustituir valores con unidades físicas consistentes en el SI.",
+            pedagogy: "Enseña orden algorítmico y control de unidades dimensionales, evitando errores aritméticos por conversión de unidades en la prueba."
+          },
+          {
+            num: 5,
+            pageNumber: 214,
+            title: "Pilar 3: Fuerzas en Plano Inclinado y Vectores",
+            shortLabel: "Pilar 3: Vectores",
+            top: 17.5,
+            left: 34.0,
+            explanation: "Descomposición trigonométrica del vector peso en componentes paralela (mg · sen(θ)) y perpendicular (mg · cos(θ)), junto con la fuerza normal y fricción.",
+            pedagogy: "Permite al estudiante dominar el análisis vectorial: entender qué fuerza causa realmente la aceleración hacia abajo en una rampa."
+          },
+          {
+            num: 6,
+            pageNumber: 214,
+            title: "Actividad en el Aula (Laboratorio y Diagramas)",
+            shortLabel: "Actividad en Aula",
+            top: 35.8,
+            left: 17.0,
+            explanation: "Diagrama vectorial incompleto para que el estudiante trace vectores faltantes, calcule aceleraciones y discuta en equipo con sus compañeros.",
+            pedagogy: "Fomenta el aprendizaje cooperativo y la argumentación científica en el aula antes de enfrentarse a la prueba individual sumativa."
+          }
+        ]
+      },
+      {
+        id: "paso4",
+        stepNum: 4,
+        title: "Paso 4: Prueba Saber",
+        subtitle: "Batería de Preguntas Saber 11",
+        badge: "PASO 4 • PRUEBA SABER",
+        purpose: "Evaluar de forma sumativa y formativa el dominio de competencias mediante una batería de 10 preguntas tipo ICFES Saber 11 bajo el diseño EBE (Estructura Basada en Evidencias).",
+        pages: [
+          { pageNumber: 215, label: "Pág. 215 • Prueba de Campo (Ítems 1 al 3)", imageSrc: "books/ms11_tomo1/page_215.jpg" },
+          { pageNumber: 218, label: "Pág. 218 • Ítem 10 y Cierre de Misión", imageSrc: "books/ms11_tomo1/page_218.jpg" }
+        ],
+        items: [
+          {
+            num: 1,
+            pageNumber: 215,
+            title: "Prueba de Campo (10 Preguntas Tipo Saber - Entrenamiento ICFES)",
+            shortLabel: "Prueba de Campo",
+            top: 22.4,
+            left: 22.0,
+            explanation: "Batería de evaluación sumativa de 10 preguntas tipo Saber 11 bajo la Estructura Basada en Evidencias (EBE). El estudiante se enfrenta al formato real con tiempos controlados, lectura de contextos experimentales y relleno de óvalos.",
+            pedagogy: "Simula las condiciones reales del examen ICFES, entrenando la gestión del tiempo y la resistencia cognitiva."
+          },
+          {
+            num: 2,
+            pageNumber: 218,
+            title: "Ítem 10: Situación Problema del Automóvil",
+            shortLabel: "Ítem 10",
+            top: 11.5,
+            left: 12.0,
+            explanation: "Pregunta de indagación y modelado: un automóvil acelera desde el reposo, mantiene velocidad constante durante un tramo y finalmente frena uniformemente hasta detenerse. Los estudiantes deben seleccionar la gráfica de velocidad (v) frente a tiempo (t) correspondiente.",
+            pedagogy: "Evalúa la traducción de lenguaje verbal descriptivo a lenguaje gráfico representacional."
+          },
+          {
+            num: 3,
+            pageNumber: 218,
+            title: "Opciones de Respuestas del Ítem 10 (Lectura de Pendientes)",
+            shortLabel: "Opciones Ítem 10",
+            top: 21.0,
+            left: 14.5,
+            explanation: "Análisis de las 4 opciones de gráficos v vs. t: la gráfica correcta debe mostrar pendiente positiva al inicio (aceleración uniforme), pendiente horizontal cero en el centro (velocidad constante) y pendiente negativa final (frenado uniforme).",
+            pedagogy: "Afianza el significado físico de la derivada/pendiente en cinemática: la pendiente de la gráfica v vs. t representa físicamente la aceleración."
+          },
+          {
+            num: 4,
+            pageNumber: 218,
+            title: "Conexión SpaceGec (15 Preguntas Virtuales de Profundización)",
+            shortLabel: "SpaceGec Virtual",
+            top: 65.0,
+            left: 28.0,
+            explanation: "Continúa tu entrenamiento: el libro físico termina aquí, pero el ecosistema digital continúa. Se invita al estudiante a ingresar a la plataforma virtual y responder 15 preguntas del reto en línea.",
+            pedagogy: "Permite una evaluación formativa extendida con retroalimentación automática y generación de analítica de aprendizaje para el docente."
+          },
+          {
+            num: 5,
+            pageNumber: 218,
+            title: "Cierre de la Misión y Consolidación de Competencias",
+            shortLabel: "Cierre de Misión",
+            top: 72.0,
+            left: 40.0,
+            explanation: "Mensaje final: 'Final de la Misión … Cargando datos. Esta Misión abordó la mecánica clásica desde tres competencias: explicación de fenómenos, uso del conocimiento e indagación... La siguiente misión profundizará en procesos energéticos (Termodinámica)'.",
+            pedagogy: "Cierra el ciclo pedagógico reforzando el sentido de autoeficacia y preparando la articulación con el siguiente componente disciplinar."
+          }
+        ]
+      }
+    ];
+
+    /**
+     * Formateador matemático universal y elegante (100% Offline)
+     */
+    function formatMathText(text) {
+      if (!text) return "";
+      return text
+        .replace(/\(\$g\s*\\approx\s*9\.8\\text\{\s*m\/s\}\^2\$\)/g, '<span class="math-badge"><i>g</i> ≈ 9.8 m/s²</span>')
+        .replace(/\$g\s*\\approx\s*9\.8\\text\{\s*m\/s\}\^2\$/g, '<span class="math-badge"><i>g</i> ≈ 9.8 m/s²</span>')
+        .replace(/\(g\s*≈\s*9\.8\s*m\/s²\)/g, '(<span class="math-badge"><i>g</i> ≈ 9.8 m/s²</span>)')
+        .replace(/g\s*≈\s*9\.8\s*m\/s²/g, '<span class="math-badge"><i>g</i> ≈ 9.8 m/s²</span>')
+        .replace(/\$a\s*=\s*g\s*\\cdot\s*\\text\{sen\}\(\\theta\)\$/g, '<span class="math-badge"><i>a</i> = <i>g</i> · sen(θ)</span>')
+        .replace(/a\s*=\s*g\s*·\s*sen\(θ\)/g, '<span class="math-badge"><i>a</i> = <i>g</i> · sen(θ)</span>')
+        .replace(/\$a\s*=\s*2d\/t\^2\$/g, '<span class="math-badge"><i>a</i> = 2<i>d</i> / <i>t</i>²</span>')
+        .replace(/a\s*=\s*2d\s*\/\s*t²/g, '<span class="math-badge"><i>a</i> = 2<i>d</i> / <i>t</i>²</span>')
+        .replace(/\$mg\\sin\\theta\$/g, '<span class="math-badge"><i>mg</i> · sen(θ)</span>')
+        .replace(/\$mg\\cos\\theta\$/g, '<span class="math-badge"><i>mg</i> · cos(θ)</span>')
+        .replace(/\$E\s*=\s*mc\^2\$/g, '<span class="math-badge"><i>E</i> = <i>mc</i>²</span>')
+        .replace(/\$([^\$]+)\$/g, (match, formula) => {
+          let f = formula
+            .replace(/\\approx/g, '≈')
+            .replace(/\\cdot/g, '·')
+            .replace(/\\theta/g, 'θ')
+            .replace(/\\text\{sen\}/g, 'sen')
+            .replace(/\\sin/g, 'sen')
+            .replace(/\\cos/g, 'cos')
+            .replace(/\\text\{m\/s\}\^2/g, 'm/s²')
+            .replace(/t\^2/g, 't²')
+            .replace(/v_0/g, 'v₀')
+            .replace(/v\^2/g, 'v²');
+          return `<span class="math-badge">${f}</span>`;
+        });
+    }
+
+    /**
+     * Controlador del Tour Guiado de Física 11°
+     */
+    class FisicaTourController {
+      constructor() {
+        this.currentStepIndex = 0;
+        this.currentPageNumber = 208;
+        this.activeItemNum = 1;
+        this.zoomStartTimer = null;
+        this.zoomReturnTimer = null;
+
+        // Elementos DOM
+        this.stepperNav = document.getElementById("stepper-nav");
+        this.pageSubtabsBar = document.getElementById("page-subtabs-bar");
+        this.pageWrapper = document.getElementById("page-wrapper");
+        this.pageImg = document.getElementById("page-img");
+        this.hotspotsContainer = document.getElementById("hotspots-container");
+        this.zoomStatusText = document.getElementById("zoom-status-text");
+        this.btnZoomReset = document.getElementById("btn-zoom-reset");
+
+        // Elementos Columna Derecha
+        this.purposeStepBadge = document.getElementById("purpose-step-badge");
+        this.purposeDescription = document.getElementById("purpose-description");
+        this.pointsCounterTag = document.getElementById("points-counter-tag");
+        this.pointsGrid = document.getElementById("points-grid");
+
+        this.detailNum = document.getElementById("detail-num");
+        this.detailTitle = document.getElementById("detail-title");
+        this.detailPageRef = document.getElementById("detail-page-ref");
+        this.detailExplanation = document.getElementById("detail-explanation");
+        this.detailPedagogy = document.getElementById("detail-pedagogy");
+        this.btnFocusItem = document.getElementById("btn-focus-item");
+
+        this.init();
+      }
+
+      init() {
+        this.renderStepperNav();
+        this.loadStep(0);
+
+        this.btnZoomReset.addEventListener("click", () => this.resetZoom());
+        this.btnFocusItem.addEventListener("click", () => {
+          const item = this.getCurrentItem();
+          if (item) this.triggerSectionZoom(item);
+        });
+
+        // Soporte de Teclado
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") this.navigateItem(1);
+          if (e.key === "ArrowLeft") this.navigateItem(-1);
+          if (e.key === "Escape" || e.key === "0") this.resetZoom();
+        });
+      }
+
+      getCurrentStep() {
+        return FISICA_STEPS_DATA[this.currentStepIndex];
+      }
+
+      getCurrentItem() {
+        const step = this.getCurrentStep();
+        return step.items.find(i => i.num === this.activeItemNum) || step.items[0];
+      }
+
+      renderStepperNav() {
+        this.stepperNav.innerHTML = "";
+        FISICA_STEPS_DATA.forEach((step, idx) => {
+          const btn = document.createElement("button");
+          btn.className = `step-btn ${idx === this.currentStepIndex ? "active" : ""}`;
+          btn.id = `step-btn-${idx}`;
+          btn.innerHTML = `
+            <span class="step-number-tag">${step.stepNum}</span>
+            <span>${step.title}</span>
+          `;
+          btn.addEventListener("click", () => this.loadStep(idx));
+          this.stepperNav.appendChild(btn);
+        });
+      }
+
+      loadStep(stepIndex) {
+        this.currentStepIndex = stepIndex;
+        const step = this.getCurrentStep();
+
+        // Actualizar Stepper Activo
+        document.querySelectorAll(".step-btn").forEach((b, idx) => {
+          b.classList.toggle("active", idx === stepIndex);
+        });
+
+        // Actualizar Cuadro de Propósito
+        this.purposeStepBadge.textContent = step.badge;
+        this.purposeDescription.innerHTML = formatMathText(step.purpose);
+        this.pointsCounterTag.textContent = `${step.items.length} puntos clave`;
+
+        // Renderizar Sub-pestañas de Páginas
+        this.renderPageSubtabs(step.pages);
+
+        // Renderizar Grid de Puntos
+        this.renderPointsGrid(step.items);
+
+        // Cargar primera página del paso
+        const firstPage = step.pages[0].pageNumber;
+        const firstItem = step.items[0];
+        this.switchPage(firstPage, firstItem ? firstItem.num : 1);
+      }
+
+      renderPageSubtabs(pages) {
+        this.pageSubtabsBar.innerHTML = "";
+        pages.forEach((p) => {
+          const btn = document.createElement("button");
+          btn.className = "page-subtab-btn";
+          btn.id = `subtab-page-${p.pageNumber}`;
+          btn.innerHTML = `<span>📄</span> <span>${p.label}</span>`;
+          btn.addEventListener("click", () => {
+            const firstOnPage = this.getCurrentStep().items.find(i => i.pageNumber === p.pageNumber);
+            this.switchPage(p.pageNumber, firstOnPage ? firstOnPage.num : null);
+          });
+          this.pageSubtabsBar.appendChild(btn);
+        });
+      }
+
+      switchPage(pageNumber, focusItemNum = null) {
+        this.currentPageNumber = pageNumber;
+        const step = this.getCurrentStep();
+        const pageCfg = step.pages.find(p => p.pageNumber === pageNumber) || step.pages[0];
+
+        clearTimeout(this.zoomStartTimer);
+        clearTimeout(this.zoomReturnTimer);
+
+        // Reset visual a escala 100%
+        this.resetZoom(false);
+
+        // Actualizar subtabs
+        document.querySelectorAll(".page-subtab-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.id === `subtab-page-${pageNumber}`);
+        });
+
+        // Cargar imagen de la página con fade
+        this.pageImg.style.opacity = "0.2";
+        this.pageImg.src = pageCfg.imageSrc;
+        this.pageImg.onload = () => {
+          this.pageImg.style.opacity = "1";
+        };
+
+        // Renderizar Hotspots de esta página específica
+        this.renderHotspotsForPage(pageNumber);
+
+        // Seleccionar punto
+        if (focusItemNum !== null) {
+          this.selectItem(focusItemNum);
+        } else {
+          const first = step.items.find(i => i.pageNumber === pageNumber);
+          if (first) this.selectItem(first.num);
+        }
+      }
+
+      renderHotspotsForPage(pageNumber) {
+        this.hotspotsContainer.innerHTML = "";
+        const step = this.getCurrentStep();
+        const pageItems = step.items.filter(i => i.pageNumber === pageNumber);
+
+        pageItems.forEach((item) => {
+          const btn = document.createElement("button");
+          btn.className = `hotspot ${item.num === this.activeItemNum ? "active" : ""}`;
+          btn.id = `hotspot-${item.num}`;
+          btn.style.top = `${item.top}%`;
+          btn.style.left = `${item.left}%`;
+          btn.setAttribute("data-label", item.shortLabel);
+          btn.textContent = item.num;
+
+          btn.addEventListener("click", () => this.selectItem(item.num, true));
+          this.hotspotsContainer.appendChild(btn);
+        });
+      }
+
+      renderPointsGrid(items) {
+        this.pointsGrid.innerHTML = "";
+        items.forEach((item) => {
+          const card = document.createElement("button");
+          card.className = "point-card-btn";
+          card.id = `point-card-${item.num}`;
+          card.innerHTML = `
+            <span class="point-num-badge">${item.num}</span>
+            <span class="point-card-label">${item.shortLabel}</span>
+            <span class="point-page-tag">P.${item.pageNumber}</span>
+          `;
+          card.addEventListener("click", () => {
+            if (this.currentPageNumber !== item.pageNumber) {
+              this.switchPage(item.pageNumber, item.num);
+            } else {
+              this.selectItem(item.num, true);
+            }
+          });
+          this.pointsGrid.appendChild(card);
+        });
+      }
+
+      selectItem(itemNum, autoZoom = false) {
+        this.activeItemNum = itemNum;
+        const step = this.getCurrentStep();
+        const item = step.items.find(i => i.num === itemNum);
+        if (!item) return;
+
+        // Si el ítem está en otra página, cambiar primero de página
+        if (this.currentPageNumber !== item.pageNumber) {
+          this.switchPage(item.pageNumber, itemNum);
+          return;
+        }
+
+        // Actualizar estados activos en Hotspots
+        document.querySelectorAll(".hotspot").forEach((h) => {
+          h.classList.toggle("active", h.id === `hotspot-${item.num}`);
+        });
+
+        // Actualizar estados activos en Grid
+        document.querySelectorAll(".point-card-btn").forEach((c) => {
+          c.classList.toggle("active", c.id === `point-card-${item.num}`);
+        });
+
+        // Actualizar Tarjeta de Detalle Derecho
+        this.detailNum.textContent = item.num;
+        this.detailTitle.innerHTML = formatMathText(item.title);
+        this.detailPageRef.textContent = `Página ${item.pageNumber} del libro`;
+        this.detailExplanation.innerHTML = formatMathText(item.explanation);
+        this.detailPedagogy.innerHTML = formatMathText(item.pedagogy);
+
+        if (autoZoom) {
+          this.triggerSectionZoom(item);
+        }
+      }
+
+      /**
+       * Ciclo de Inspección Inteligente:
+       * 1. Siempre inicia desde la hoja completa.
+       * 2. Hace zoom suave 1.95x sobre el punto.
+       * 3. Regresa suavemente a la hoja completa después de 3.8s.
+       */
+      triggerSectionZoom(item) {
+        if (!this.pageWrapper || !item) return;
+
+        clearTimeout(this.zoomStartTimer);
+        clearTimeout(this.zoomReturnTimer);
+
+        // 1. Hoja completa base
+        this.pageWrapper.classList.remove("is-zoomed");
+        this.pageWrapper.style.transform = "scale(1)";
+        this.pageWrapper.style.transformOrigin = "center center";
+        this.zoomStatusText.innerHTML = `📄 Hoja completa • Enfocando punto ${item.num}...`;
+
+        // 2. Zoom hacia la región
+        this.zoomStartTimer = setTimeout(() => {
+          this.pageWrapper.classList.add("is-zoomed");
+
+          const originX = Math.max(14, Math.min(86, item.left));
+          const originY = Math.max(14, Math.min(86, item.top));
+
+          this.pageWrapper.style.transformOrigin = `${originX}% ${originY}%`;
+          this.pageWrapper.style.transform = "scale(1.95)";
+          this.zoomStatusText.innerHTML = `🔍 Ampliando: ${item.shortLabel} (1.95x) • Vuelve a vista general en 3.8s`;
+
+          // 3. Regreso suave a vista general
+          this.zoomReturnTimer = setTimeout(() => {
+            this.resetZoom();
+          }, 3800);
+        }, 160);
+      }
+
+      resetZoom(updateText = true) {
+        clearTimeout(this.zoomStartTimer);
+        clearTimeout(this.zoomReturnTimer);
+
+        if (this.pageWrapper) {
+          this.pageWrapper.classList.remove("is-zoomed");
+          this.pageWrapper.style.transform = "scale(1)";
+          this.pageWrapper.style.transformOrigin = "center center";
+        }
+        if (updateText && this.zoomStatusText) {
+          this.zoomStatusText.innerHTML = "📄 Vista de hoja completa (100%) • Clic en un número para inspeccionar";
+        }
+      }
+
+      navigateItem(delta) {
+        const step = this.getCurrentStep();
+        const currentIndex = step.items.findIndex(i => i.num === this.activeItemNum);
+        let nextIndex = currentIndex + delta;
+
+        if (nextIndex < 0) nextIndex = step.items.length - 1;
+        if (nextIndex >= step.items.length) nextIndex = 0;
+
+        const nextItem = step.items[nextIndex];
+        if (nextItem.pageNumber !== this.currentPageNumber) {
+          this.switchPage(nextItem.pageNumber, nextItem.num);
+        } else {
+          this.selectItem(nextItem.num, true);
+        }
+      }
+    }
+
+    // Inicializar al cargar el DOM
+    document.addEventListener("DOMContentLoaded", () => {
+      window.fisicaTour = new FisicaTourController();
+    });
+  </script>
+</body>
+</html>

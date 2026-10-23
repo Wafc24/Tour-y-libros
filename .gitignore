@@ -1,0 +1,25 @@
+# ==============================================================================
+# .gitignore - Ecosistema y Libros Misión Saber
+# ==============================================================================
+
+# 1. Archivos PDF Originales Masivos (Superan el límite estricto de 100 MB de GitHub)
+Libros PDF/
+*.pdf
+
+# 2. Enlaces simbólicos / junctions redundantes en Windows
+Page
+
+# 3. Archivos generados de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 4. Archivos temporales de sistema operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# 5. Configuración de editores
+.vscode/
+.idea/

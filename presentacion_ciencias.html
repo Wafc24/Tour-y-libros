@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentación Pedagógica Interactiva - Ciencias Naturales</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES Y RESET (Diseño Oscuro Glassmorphism)
+       ========================================================================== */
+    :root {
+      --bg-dark: #0a0d14;
+      --bg-surface: rgba(18, 24, 38, 0.72);
+      --bg-card: rgba(26, 34, 52, 0.65);
+      --border-glass: rgba(255, 255, 255, 0.12);
+      --border-accent: rgba(56, 189, 248, 0.35);
+      --accent-cyan: #38bdf8;
+      --accent-cyan-glow: rgba(56, 189, 248, 0.4);
+      --accent-purple: #a855f7;
+      --accent-gold: #f59e0b;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+      --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(168, 85, 247, 0.14) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.9) 0%, var(--bg-dark) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-primary);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================================================
+       ENCABEZADO DE LA PRESENTACIÓN
+       ========================================================================== */
+    header.main-header {
+      padding: 16px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(10, 13, 20, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* Stepper de fases en cabecera */
+    .phase-stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-glass);
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-pill:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-primary);
+    }
+
+    .step-pill.active {
+      background: var(--accent-cyan);
+      color: #0b1120;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 16px var(--accent-cyan-glow);
+    }
+
+    /* ==========================================================================
+       LAYOUT PRINCIPAL DE DOS COLUMNAS (50% / 50%)
+       ========================================================================== */
+    main.presentation-stage {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding: 24px 36px;
+      max-width: 1700px;
+      width: 100%;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+
+    /* ==========================================================================
+       COLUMNA IZQUIERDA: VISOR DE PÁGINA Y HOTSPOTS INTERACTIVOS
+       ========================================================================== */
+    .page-viewer-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .page-card {
+      position: relative;
+      background: var(--bg-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+      max-height: calc(100vh - 170px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .page-image-wrapper {
+      position: relative;
+      display: inline-block;
+      max-height: calc(100vh - 200px);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .page-image-wrapper img {
+      display: block;
+      max-height: calc(100vh - 200px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      transition: opacity 0.3s ease;
+    }
+
+    /* Puntos Calientes (Hotspots) Interactivos */
+    .hotspot {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, var(--accent-cyan));
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      z-index: 10;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      animation: hotspotPulse 2.2s infinite;
+      box-shadow: 0 0 12px var(--accent-cyan-glow);
+    }
+
+    .hotspot:hover {
+      transform: translate(-50%, -50%) scale(1.18);
+      background: linear-gradient(135deg, var(--accent-cyan), #ffffff);
+      color: #0369a1;
+      animation: none;
+    }
+
+    .hotspot.active {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      border-color: #ffffff;
+      color: #78350f;
+      transform: translate(-50%, -50%) scale(1.22);
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.7);
+      animation: activePulse 1.8s infinite;
+    }
+
+    @keyframes hotspotPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 18px rgba(56, 189, 248, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+      }
+    }
+
+    @keyframes activePulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
+      }
+      70% {
+        box-shadow: 0 0 0 20px rgba(245, 158, 11, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+      }
+    }
+
+    /* Tooltip sutil en el hotspot */
+    .hotspot::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 500;
+      white-space: nowrap;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-glass);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .hotspot:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    /* ==========================================================================
+       COLUMNA DERECHA: PANEL GLASSMORPHISM DEL AVATAR Y EXPLICACIÓN
+       ========================================================================== */
+    .explanation-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      justify-content: center;
+    }
+
+    .glass-panel {
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    /* Cabecera del panel pedagógico */
+    .panel-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 14px;
+    }
+
+    .fase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+    }
+
+    .fase-badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .page-indicator-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border-glass);
+    }
+
+    /* Sección del Avatar y Bocadillo de Diálogo */
+    .avatar-dialogue-container {
+      display: flex;
+      gap: 22px;
+      align-items: flex-start;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-frame {
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #0f172a;
+      transition: transform 0.3s ease;
+    }
+
+    .avatar-wrapper:hover .avatar-img {
+      transform: scale(1.06);
+    }
+
+    .avatar-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: center;
+    }
+
+    .avatar-role {
+      font-size: 0.72rem;
+      color: var(--accent-cyan);
+      text-align: center;
+    }
+
+    /* Cuadro de Diálogo Estilo Cómic / Futurista */
+    .dialogue-bubble {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transition: border-color var(--transition);
+    }
+
+    /* Flecha del bocadillo */
+    .dialogue-bubble::before {
+      content: "";
+      position: absolute;
+      top: 30px;
+      left: -9px;
+      width: 16px;
+      height: 16px;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border-accent);
+      border-bottom: 1px solid var(--border-accent);
+      transform: rotate(45deg);
+    }
+
+    .dialogue-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dialogue-text {
+      font-size: 0.96rem;
+      line-height: 1.65;
+      color: #e2e8f0;
+      min-height: 80px;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Etiquetas de enfoque pedagógico */
+    .pedagogical-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .tag-item {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .tag-item.highlight {
+      background: rgba(168, 85, 247, 0.12);
+      color: #c084fc;
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    /* Lista rápida de hotspots para seleccionar con un clic */
+    .hotspots-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hotspot-card-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      text-align: left;
+    }
+
+    .hotspot-card-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hotspot-card-btn.active {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .hotspot-num-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .hotspot-card-btn.active .hotspot-num-badge {
+      background: var(--accent-cyan);
+      color: #0b1120;
+    }
+
+    .hotspot-card-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       BARRA DE NAVEGACIÓN INFERIOR (ANTERIOR / SIGUIENTE)
+       ========================================================================== */
+    .navigation-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-glass);
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-glass);
+      color: var(--text-primary);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: var(--accent-cyan);
+      color: #0b1120;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 16px var(--accent-cyan-glow);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.28;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Animación de cambio de diapositiva */
+    .fade-in {
+      animation: fadeIn 0.35s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       RESPONSIVE
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      main.presentation-stage {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .page-card {
+        max-height: 550px;
+      }
+      .page-image-wrapper img {
+        max-height: 500px;
+      }
+      header.main-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado con título y navegación directa por fases -->
+  <header class="main-header">
+    <div class="brand-group">
+      <span class="brand-badge">SpaceGec</span>
+      <div>
+        <h1 class="brand-title">Misión Saber 3° • Ciencias Naturales</h1>
+        <p class="brand-subtitle">Exploración Interactiva de las Fases Pedagógicas</p>
+      </div>
+    </div>
+
+    <!-- Stepper de las 4 Fases -->
+    <nav class="phase-stepper" id="phase-stepper">
+      <button class="step-pill active" data-phase="0">Fase 1: Comando</button>
+      <button class="step-pill" data-phase="1">Fase 2: Simulador</button>
+      <button class="step-pill" data-phase="2">Fase 3: Exploración</button>
+      <button class="step-pill" data-phase="3">Fase 4: Avances</button>
+    </nav>
+  </header>
+
+  <!-- Escenario Principal (50% Izquierda / 50% Derecha) -->
+  <main class="presentation-stage">
+
+    <!-- COLUMNA IZQUIERDA: PÁGINA CON PUNTOS CALIENTES INTERACTIVOS -->
+    <section class="page-viewer-column">
+      <div class="page-card">
+        <div class="page-image-wrapper" id="page-image-wrapper">
+          <img id="current-page-img" src="assets/pagina_fase1.jpg" alt="Página de la Fase Pedagógica" onerror="this.src='pagina_fase1.jpg'">
+          <!-- Contenedor dinámico de hotspots -->
+          <div id="hotspots-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA: PANEL GLASSMORPHISM DEL AVATAR Y EXPLICACIÓN -->
+    <section class="explanation-column">
+      <div class="glass-panel">
+        
+        <!-- Metadatos de la fase -->
+        <div class="panel-meta">
+          <span class="fase-badge" id="panel-fase-badge">Fase 1 • Centro de Comando</span>
+          <span class="page-indicator-badge" id="panel-page-num">Pág. 2 del Libro</span>
+        </div>
+
+        <!-- Avatar y Cuadro de Diálogo -->
+        <div class="avatar-dialogue-container">
+          <!-- Avatar del Astronauta -->
+          <div class="avatar-wrapper">
+            <div class="avatar-frame">
+              <img id="avatar-img" class="avatar-img" src="assets/avatar_nino.png" alt="Avatar Astronauta" onerror="this.src='avatar_nino.png'">
+            </div>
+            <div class="avatar-name" id="avatar-name">Comandante Leo</div>
+            <div class="avatar-role" id="avatar-role">Guía de Misión</div>
+          </div>
+
+          <!-- Cuadro de Diálogo -->
+          <div class="dialogue-bubble">
+            <h2 class="dialogue-title" id="dialogue-title">🎯 Centro de Comando</h2>
+            <p class="dialogue-text" id="dialogue-text">
+              ¡Bienvenido al Centro de Comando! En esta fase recibes tu misión y preparas tus herramientas de explorador. Haz clic en cualquiera de los puntos circulares interactivos en la página para descubrir el propósito pedagógico de cada sección.
+            </p>
+
+            <!-- Etiquetas pedagógicas dinámicas -->
+            <div class="pedagogical-tags" id="pedagogical-tags">
+              <span class="tag-item">Saberes Previos</span>
+              <span class="tag-item highlight">Motivación y Reto</span>
+              <span class="tag-item">Indagación Inicial</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista rápida de puntos calientes de la diapositiva -->
+        <div class="hotspots-selector" id="hotspots-selector"></div>
+
+        <!-- Barra de navegación (Anterior / Siguiente) -->
+        <footer class="navigation-bar">
+          <button class="nav-btn" id="btn-prev" disabled>
+            <span>&larr;</span> Anterior
+          </button>
+          <span class="slide-counter" id="slide-counter">Diapositiva 1 de 4</span>
+          <button class="nav-btn" id="btn-next">
+            Siguiente <span>&rarr;</span>
+          </button>
+        </footer>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       LÓGICA JAVASCRIPT: MANEJO DE ESTADO Y PRESENTACIÓN INTERACTIVA
+       ========================================================================== -->
+  <script>
+    /**
+     * DATOS DE LAS 4 FASES PEDAGÓGICAS Y SUS PUNTOS CALIENTES
+     * Estructura modular desacoplada del renderizado.
+     */
+    const PHASES_DATA = [
+      {
+        id: "fase1",
+        title: "Fase 1: Centro de Comando",
+        badge: "Fase 1 • Centro de Comando",
+        pageNum: "Pág. 2 del Libro (Pág. 88)",
+        imageSrc: "assets/pagina_fase1.jpg",
+        fallbackImage: "pagina_fase1.jpg",
+        avatar: {
+          name: "Comandante Leo",
+          role: "Líder de Expedición",
+          src: "assets/avatar_nino.png",
+          fallback: "avatar_nino.png"
+        },
+        hotspots: [
+          {
+            id: "f1-h1",
+            num: 1,
+            top: 24, // % vertical
+            left: 55, // % horizontal
+            label: "Conexión SpaceGec",
+            title: "🚀 Conexión SpaceGec: Recurso Digital",
+            text: "Integra tecnología educativa para despertar el interés científico. Los estudiantes acceden a una cápsula audiovisual ('¿Qué es un planeta?') que contextualiza el aprendizaje mediante gamificación espacial y lenguaje cercano a su edad.",
+            tags: ["Recurso Digital", "Curiosidad Científica", "Enfoque STEAM"]
+          },
+          {
+            id: "f1-h2",
+            num: 2,
+            top: 48,
+            left: 50,
+            label: "Reto de la Misión",
+            title: "🎯 ¿Cuál es nuestro desafío? Reto de la Misión",
+            text: "Plantea una situación problema contextualizada: el estudiante asume el rol de 'detective del universo' para investigar qué condiciones hacen posible la vida. Transforma el aprendizaje pasivo en una búsqueda activa con propósito claro.",
+            tags: ["Aprendizaje Basado en Retos", "Rol Protagónico", "Pensamiento Crítico"]
+          },
+          {
+            id: "f1-h3",
+            num: 3,
+            top: 86,
+            left: 20,
+            label: "Avatar Astronauta",
+            title: "👨‍🚀 El Avatar como Mediador Pedagógico",
+            text: "El avatar astronauta acompaña permanentemente al estudiante, proporcionándole pistas de metacognición, preguntas guía y refuerzo positivo que fortalecen la autoeficacia y la persistencia en las tareas.",
+            tags: ["Andamiaje Cognitivo", "Identidad Exploradora", "Gamificación"]
+          }
+        ]
+      },
+      {
+        id: "f2",
+        title: "Fase 2: Simulador de Vuelo",
+        badge: "Fase 2 • Simulador de Vuelo",
+        pageNum: "Pág. 5 del Libro (Pág. 91)",
+        imageSrc: "assets/pagina_fase2.jpg",
+        fallbackImage: "pagina_fase2.jpg",
+        avatar: {
+          name: "Científica Maya",
+          role: "Especialista Pedagógica",
+          src: "assets/avatar_nina.png",
+          fallback: "avatar_nina.png"
+        },
+        hotspots: [
+          {
+            id: "f2-h1",
+            num: 1,
+            top: 15,
+            left: 48,
+            label: "Pensar como Científico",
+            title: "🧠 Aprender a Pensar como un Científico",
+            text: "Presenta el método científico de manera estructurada y accesible. Guía al estudiante a través de 4 pasos clave: Observar detenidamente, Plantear preguntas comprobables, Experimentar con control de variables y Concluir con base en evidencias.",
+            tags: ["Habilidades Científicas", "Modelamiento Cognitivo", "Estructuración"]
+          },
+          {
+            id: "f2-h2",
+            num: 2,
+            top: 38,
+            left: 35,
+            label: "Cajas de Cultivo",
+            title: "🌱 Situación Experimental: Cajas de Cultivo",
+            text: "Propone un dilema auténtico: comparar tres cajas de cultivo de plantas de frijol variando luz y humedad. Promueve el aislamiento de variables y la predicción reflexiva antes de la comprobación.",
+            tags: ["Control de Variables", "Predicción", "Botánica y Ecosistemas"]
+          },
+          {
+            id: "f2-h3",
+            num: 3,
+            top: 72,
+            left: 55,
+            label: "Toma de Decisiones",
+            title: "🛡️ Toma de Decisiones Seguras y Razonadas",
+            text: "Estimula la capacidad de argumentación y toma de decisiones basadas en datos empíricos, sentando las bases del pensamiento analítico antes de iniciar las lecturas conceptuales densas.",
+            tags: ["Toma de Decisiones", "Argumentación", "Cultura del Ensayo"]
+          }
+        ]
+      },
+      {
+        id: "f3",
+        title: "Fase 3: Exploración de la Misión",
+        badge: "Fase 3 • Exploración de la Misión",
+        pageNum: "Pág. 6 del Libro (Pág. 92)",
+        imageSrc: "assets/pagina_fase3.jpg",
+        fallbackImage: "pagina_fase3.jpg",
+        avatar: {
+          name: "Comandante Leo",
+          role: "Explorador de Campo",
+          src: "assets/avatar_nino.png",
+          fallback: "avatar_nino.png"
+        },
+        hotspots: [
+          {
+            id: "f3-h1",
+            num: 1,
+            top: 18,
+            left: 32,
+            label: "Observación de Elementos",
+            title: "🔭 Observación y Clasificación de la Naturaleza",
+            text: "Introduce la observación sistemática de un planeta o ecosistema para discriminar componentes. La pregunta orientadora conecta lo micro (un terrario o planta) con lo macro (un planeta habitable).",
+            tags: ["Clasificación Biológica", "Observación Guiada", "Conceptos Clave"]
+          },
+          {
+            id: "f3-h2",
+            num: 2,
+            top: 38,
+            left: 36,
+            label: "Factores Bióticos",
+            title: "🐾 Factores Bióticos: La Red de la Vida",
+            text: "Conceptualiza con claridad los seres que tienen vida (plantas, animales, hongos y microorganismos). El diseño gráfico separa con viñetas destacadas los conceptos para facilitar la comprensión lectora en básica primaria.",
+            tags: ["Factores Bióticos", "Biodiversidad", "Comprensión Lectora"]
+          },
+          {
+            id: "f3-h3",
+            num: 3,
+            top: 60,
+            left: 36,
+            label: "Factores Abióticos",
+            title: "☀️ Factores Abióticos: El Soporte Físico",
+            text: "Explica los componentes no vivos indispensables (luz solar, agua, suelo, temperatura y aire). Muestra cómo estos factores determinan directamente la supervivencia y distribución de las especies.",
+            tags: ["Factores Abióticos", "Ecología Fundamental", "Interdependencia"]
+          }
+        ]
+      },
+      {
+        id: "f4",
+        title: "Fase 4: Informando Avances",
+        badge: "Fase 4 • Informando Avances",
+        pageNum: "Pág. 22 del Libro (Pág. 108)",
+        imageSrc: "assets/pagina_fase4.jpg",
+        fallbackImage: "pagina_fase4.jpg",
+        avatar: {
+          name: "Científica Maya",
+          role: "Evaluadora Pedagógica",
+          src: "assets/avatar_nina.png",
+          fallback: "avatar_nina.png"
+        },
+        hotspots: [
+          {
+            id: "f4-h1",
+            num: 1,
+            top: 18,
+            left: 45,
+            label: "Problema Evaluativo",
+            title: "📝 Pregunta de Desempeño: Observación de Rocas",
+            text: "Presenta una pregunta alineada a los estándares de evaluación de competencias científicas (tipo pruebas saber). Plantea la necesidad de registrar los colores de una muestra dentro de una caja oscura.",
+            tags: ["Evaluación por Competencias", "Uso Comprensivo del Conocimiento", "Pruebas Saber"]
+          },
+          {
+            id: "f4-h2",
+            num: 2,
+            top: 34,
+            left: 55,
+            label: "Opciones de Respuesta",
+            title: "🔍 Análisis de Distractores y Evidencias",
+            text: "Cada opción de respuesta (A, B, C, D) evalúa la comprensión de cómo la luz interactúa con la materia y cómo el método experimental evita conclusiones sesgadas (ej. luz blanca vs. luz roja).",
+            tags: ["Indagación", "Manejo de Instrumentos", "Discriminación de Evidencias"]
+          },
+          {
+            id: "f4-h3",
+            num: 3,
+            top: 75,
+            left: 50,
+            label: "Retroalimentación",
+            title: "📊 Evaluación Formativa y Socialización",
+            text: "La fase no busca calificar de forma punitiva, sino diagnosticar vacíos conceptuales para que el docente pueda realizar retroalimentación inmediata ('devolución pedagógica') antes de la siguiente misión.",
+            tags: ["Evaluación Formativa", "Retroalimentación", "Metacognición"]
+          }
+        ]
+      }
+    ];
+
+    /**
+     * GESTOR DE ESTADO DE LA PRESENTACIÓN (State Manager)
+     */
+    class PresentationManager {
+      constructor(data) {
+        this.data = data;
+        this.currentPhaseIndex = 0;
+        this.activeHotspotId = null;
+
+        // Referencias a elementos del DOM
+        this.pageImg = document.getElementById("current-page-img");
+        this.hotspotsContainer = document.getElementById("hotspots-container");
+        this.panelFaseBadge = document.getElementById("panel-fase-badge");
+        this.panelPageNum = document.getElementById("panel-page-num");
+        this.avatarImg = document.getElementById("avatar-img");
+        this.avatarName = document.getElementById("avatar-name");
+        this.avatarRole = document.getElementById("avatar-role");
+        this.dialogueTitle = document.getElementById("dialogue-title");
+        this.dialogueText = document.getElementById("dialogue-text");
+        this.pedagogicalTags = document.getElementById("pedagogical-tags");
+        this.hotspotsSelector = document.getElementById("hotspots-selector");
+        this.btnPrev = document.getElementById("btn-prev");
+        this.btnNext = document.getElementById("btn-next");
+        this.slideCounter = document.getElementById("slide-counter");
+        this.stepPills = document.querySelectorAll(".step-pill");
+
+        this.init();
+      }
+
+      init() {
+        this.bindEvents();
+        this.renderPhase(0);
+      }
+
+      bindEvents() {
+        // Botones Anterior y Siguiente
+        this.btnPrev.addEventListener("click", () => this.prevPhase());
+        this.btnNext.addEventListener("click", () => this.nextPhase());
+
+        // Stepper superior
+        this.stepPills.forEach((pill) => {
+          pill.addEventListener("click", (e) => {
+            const phaseIdx = parseInt(e.currentTarget.getAttribute("data-phase"), 10);
+            this.goToPhase(phaseIdx);
+          });
+        });
+
+        // Navegación con teclado (Flechas izquierda / derecha)
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") this.nextPhase();
+          if (e.key === "ArrowLeft") this.prevPhase();
+        });
+      }
+
+      getCurrentPhase() {
+        return this.data[this.currentPhaseIndex];
+      }
+
+      goToPhase(index) {
+        if (index < 0 || index >= this.data.length || index === this.currentPhaseIndex) return;
+        this.currentPhaseIndex = index;
+        this.renderPhase(index);
+      }
+
+      nextPhase() {
+        if (this.currentPhaseIndex < this.data.length - 1) {
+          this.goToPhase(this.currentPhaseIndex + 1);
+        }
+      }
+
+      prevPhase() {
+        if (this.currentPhaseIndex > 0) {
+          this.goToPhase(this.currentPhaseIndex - 1);
+        }
+      }
+
+      renderPhase(index) {
+        const phase = this.data[index];
+
+        // 1. Actualizar imagen de la página con fade
+        this.pageImg.style.opacity = "0.2";
+        this.pageImg.src = phase.imageSrc;
+        this.pageImg.onerror = () => {
+          this.pageImg.src = phase.fallbackImage;
+        };
+        this.pageImg.onload = () => {
+          this.pageImg.style.opacity = "1";
+        };
+
+        // 2. Metadatos del panel
+        this.panelFaseBadge.textContent = phase.badge;
+        this.panelPageNum.textContent = phase.pageNum;
+
+        // 3. Avatar
+        this.avatarName.textContent = phase.avatar.name;
+        this.avatarRole.textContent = phase.avatar.role;
+        this.avatarImg.src = phase.avatar.src;
+        this.avatarImg.onerror = () => {
+          this.avatarImg.src = phase.avatar.fallback;
+        };
+
+        // 4. Renderizar Hotspots circulares sobre la imagen
+        this.renderHotspots(phase.hotspots);
+
+        // 5. Renderizar selector de hotspots en el panel lateral
+        this.renderHotspotSelector(phase.hotspots);
+
+        // 6. Activar por defecto el primer punto caliente
+        if (phase.hotspots && phase.hotspots.length > 0) {
+          this.selectHotspot(phase.hotspots[0].id);
+        }
+
+        // 7. Actualizar controles de navegación y stepper
+        this.btnPrev.disabled = index === 0;
+        this.btnNext.disabled = index === this.data.length - 1;
+        this.slideCounter.textContent = `Diapositiva ${index + 1} de ${this.data.length}`;
+
+        this.stepPills.forEach((pill, idx) => {
+          pill.classList.toggle("active", idx === index);
+        });
+      }
+
+      renderHotspots(hotspots) {
+        this.hotspotsContainer.innerHTML = "";
+
+        hotspots.forEach((h) => {
+          const btn = document.createElement("button");
+          btn.className = "hotspot";
+          btn.id = `hs-btn-${h.id}`;
+          btn.style.top = `${h.top}%`;
+          btn.style.left = `${h.left}%`;
+          btn.setAttribute("data-label", h.label);
+          btn.textContent = h.num;
+
+          btn.addEventListener("click", () => this.selectHotspot(h.id));
+          this.hotspotsContainer.appendChild(btn);
+        });
+      }
+
+      renderHotspotSelector(hotspots) {
+        this.hotspotsSelector.innerHTML = "";
+
+        hotspots.forEach((h) => {
+          const card = document.createElement("button");
+          card.className = "hotspot-card-btn";
+          card.id = `hs-card-${h.id}`;
+
+          card.innerHTML = `
+            <span class="hotspot-num-badge">${h.num}</span>
+            <span class="hotspot-card-text">${h.label}</span>
+          `;
+
+          card.addEventListener("click", () => this.selectHotspot(h.id));
+          this.hotspotsSelector.appendChild(card);
+        });
+      }
+
+      selectHotspot(hotspotId) {
+        const phase = this.getCurrentPhase();
+        const hotspot = phase.hotspots.find((h) => h.id === hotspotId);
+        if (!hotspot) return;
+
+        this.activeHotspotId = hotspotId;
+
+        // Actualizar clases activas en botones circulares
+        document.querySelectorAll(".hotspot").forEach((el) => {
+          el.classList.toggle("active", el.id === `hs-btn-${hotspotId}`);
+        });
+
+        // Actualizar clases activas en selector del panel
+        document.querySelectorAll(".hotspot-card-btn").forEach((el) => {
+          el.classList.toggle("active", el.id === `hs-card-${hotspotId}`);
+        });
+
+        // Actualizar contenido del diálogo con transición suave
+        this.dialogueTitle.innerHTML = hotspot.title;
+        
+        this.dialogueText.style.opacity = "0.2";
+        setTimeout(() => {
+          this.dialogueText.textContent = hotspot.text;
+          this.dialogueText.style.opacity = "1";
+        }, 120);
+
+        // Actualizar etiquetas pedagógicas
+        this.pedagogicalTags.innerHTML = "";
+        hotspot.tags.forEach((tag, idx) => {
+          const tagSpan = document.createElement("span");
+          tagSpan.className = `tag-item ${idx === 1 ? "highlight" : ""}`;
+          tagSpan.textContent = tag;
+          this.pedagogicalTags.appendChild(tagSpan);
+        });
+      }
+    }
+
+    // Inicialización al cargar el DOM
+    document.addEventListener("DOMContentLoaded", () => {
+      window.presentation = new PresentationManager(PHASES_DATA);
+    });
+  </script>
+
+</body>
+</html>
