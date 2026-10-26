@@ -272,6 +272,19 @@
         <div class="tour-steps-row" id="tour-steps-nav">
           <!-- Renderizado dinámico de Fases o Pasos -->
         </div>
+        <!-- Controles de Auto-Presentación y Narración Guiada -->
+        <div class="tour-autopilot-controls">
+          <button class="btn-auto-tour" id="btn-auto-tour" title="Iniciar o pausar Auto-Presentación interactiva paso a paso">
+            <span class="auto-tour-icon" id="auto-tour-icon">▶</span>
+            <span class="auto-tour-label" id="auto-tour-label">Auto-Presentación</span>
+          </button>
+          <button class="btn-auto-stop hidden" id="btn-auto-stop" title="Detener Auto-Presentación y volver al control manual">
+            <span>⏹</span>
+          </button>
+          <button class="btn-voice-toggle active" id="btn-voice-toggle" title="Voz del Avatar Narrador: Activa / Silenciada">
+            <span id="voice-toggle-icon">🔊</span>
+          </button>
+        </div>
       </div>
 
       <!-- Layout Split 50% / 50% -->
@@ -284,9 +297,11 @@
 
           <div class="tour-page-stage" id="tour-page-stage">
             <div class="tour-zoom-wrapper" id="tour-zoom-wrapper">
-              <img id="tour-page-img" class="tour-page-img" src="" alt="Página del libro">
-              <div class="tour-hotspots-layer" id="tour-hotspots-layer">
-                <!-- Hotspots circulares inyectados dinámicamente -->
+              <div class="tour-page-frame" id="tour-page-frame">
+                <img id="tour-page-img" class="tour-page-img" src="" alt="Página del libro">
+                <div class="tour-hotspots-layer" id="tour-hotspots-layer">
+                  <!-- Hotspots circulares inyectados dinámicamente -->
+                </div>
               </div>
             </div>
           </div>
@@ -303,6 +318,26 @@
           <div class="tour-purpose-box">
             <div class="tour-purpose-badge" id="tour-purpose-badge">Propósito Pedagógico</div>
             <div class="tour-purpose-text" id="tour-purpose-text">Cargando propósito...</div>
+          </div>
+
+          <!-- Avatar Guía Narrador Interactivo con Ondas de Audio -->
+          <div class="tour-avatar-narrator" id="tour-avatar-narrator">
+            <div class="avatar-speaker-container">
+              <div class="avatar-glow-ring" id="avatar-glow-ring"></div>
+              <img id="tour-avatar-img" class="avatar-speaker-img" src="assets/avatar_nino.png" alt="Avatar Guía">
+              <div class="voice-soundwaves" id="voice-soundwaves">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="avatar-speech-bubble" id="avatar-speech-bubble">
+              <div class="avatar-speech-header">
+                <span class="avatar-badge-tag" id="avatar-speaker-name">Prof. Cuántico • Guía Saber 11</span>
+                <span class="avatar-voice-state-pill" id="avatar-voice-state-pill">Voz Lista</span>
+              </div>
+              <div class="avatar-speech-text" id="avatar-speech-text">
+                ¡Bienvenido a la Misión Saber 11°! Haz clic en cualquier punto de la hoja o presiona «Auto-Presentación» para comenzar el recorrido narrado paso a paso.
+              </div>
+            </div>
           </div>
 
           <!-- Selector de Puntos del Paso Actual -->
