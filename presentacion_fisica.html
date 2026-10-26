@@ -269,12 +269,12 @@
 
     .page-image-wrapper {
       position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform-origin: center center;
+      display: inline-block;
+      max-height: calc(100vh - 210px);
+      max-width: 100%;
+      border-radius: var(--radius-md);
+      overflow: visible;
+      line-height: 0;
       transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
       will-change: transform;
     }
@@ -284,10 +284,11 @@
     }
 
     .book-page-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
       display: block;
+      max-height: calc(100vh - 210px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
       user-select: none;
       -webkit-user-drag: none;
       border-radius: 4px;
@@ -299,6 +300,8 @@
       position: absolute;
       top: 0;
       left: 0;
+      right: 0;
+      bottom: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
@@ -670,6 +673,228 @@
       white-space: nowrap;
     }
 
+    /* Controles de Auto-Presentación y Narración */
+    .tour-autopilot-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-auto-tour {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--energy-amber-plasma), #E65A40);
+      border: 1px solid var(--energy-gold-bright);
+      color: #ffffff;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 16px rgba(208, 73, 49, 0.45);
+      white-space: nowrap;
+    }
+
+    .btn-auto-tour:hover {
+      background: linear-gradient(135deg, #f05a3e, #ff6b4a);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(208, 73, 49, 0.65);
+    }
+
+    .btn-auto-tour.running {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: #34d399;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-auto-stop {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(220, 38, 38, 0.25);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-auto-stop:hover {
+      background: #dc2626;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+
+    .btn-auto-stop.hidden {
+      display: none;
+    }
+
+    .btn-voice-toggle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--bg-panel-border);
+      color: var(--text-gold-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-voice-toggle:hover {
+      background: rgba(226, 191, 62, 0.2);
+      border-color: var(--energy-gold-primary);
+    }
+
+    .btn-voice-toggle.muted {
+      opacity: 0.45;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Avatar Guía Narrador Interactivo */
+    .tour-avatar-narrator {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: rgba(26, 31, 20, 0.85);
+      border: 1px solid var(--bg-panel-border);
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .tour-avatar-narrator.speaking {
+      border-color: var(--hud-cyan-electric);
+      box-shadow: 0 0 22px rgba(47, 174, 207, 0.45);
+    }
+
+    .avatar-speaker-container {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-speaker-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      border: 2px solid var(--hud-cyan-electric);
+      background: #181E27;
+      z-index: 2;
+      transition: transform 0.25s ease;
+    }
+
+    .tour-avatar-narrator.speaking .avatar-speaker-img {
+      transform: scale(1.08);
+      border-color: var(--energy-gold-bright);
+    }
+
+    .avatar-glow-ring {
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 50%;
+      background: transparent;
+      border: 2px solid transparent;
+      pointer-events: none;
+    }
+
+    .tour-avatar-narrator.speaking .avatar-glow-ring {
+      border-color: var(--hud-cyan-electric);
+      animation: avatarRingPulse 1.8s infinite;
+    }
+
+    @keyframes avatarRingPulse {
+      0% { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+
+    .voice-soundwaves {
+      position: absolute;
+      bottom: -5px;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+      z-index: 3;
+    }
+
+    .voice-soundwaves span {
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      background: var(--energy-gold-bright);
+      border-radius: 2px;
+      transition: height 0.15s ease;
+    }
+
+    .tour-avatar-narrator.speaking .voice-soundwaves span:nth-child(1) { animation: waveAnim 0.7s infinite alternate 0.1s; }
+    .tour-avatar-narrator.speaking .voice-soundwaves span:nth-child(2) { animation: waveAnim 0.6s infinite alternate 0.2s; }
+    .tour-avatar-narrator.speaking .voice-soundwaves span:nth-child(3) { animation: waveAnim 0.8s infinite alternate 0.15s; }
+    .tour-avatar-narrator.speaking .voice-soundwaves span:nth-child(4) { animation: waveAnim 0.5s infinite alternate 0.3s; }
+
+    @keyframes waveAnim {
+      0% { height: 3px; }
+      100% { height: 12px; }
+    }
+
+    .avatar-speech-bubble {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .avatar-speech-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .avatar-badge-tag {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--hud-cyan-electric);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .avatar-voice-state-pill {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: rgba(47, 174, 207, 0.18);
+      border: 1px solid rgba(47, 174, 207, 0.4);
+      color: var(--hud-cyan-electric);
+    }
+
+    .avatar-speech-text {
+      font-size: 0.86rem;
+      color: #e5e7eb;
+      line-height: 1.45;
+    }
+
     /* Scrollbar estilizada */
     ::-webkit-scrollbar {
       width: 6px;
@@ -712,6 +937,19 @@
           <span class="formula-tag">E = mc²</span>
         </div>
       </div>
+    </div>
+
+    <div class="tour-autopilot-controls">
+      <button class="btn-auto-tour" id="btn-auto-tour" title="Iniciar o pausar Auto-Presentación interactiva paso a paso">
+        <span class="auto-tour-icon" id="auto-tour-icon">▶</span>
+        <span class="auto-tour-label" id="auto-tour-label">Auto-Presentación</span>
+      </button>
+      <button class="btn-auto-stop hidden" id="btn-auto-stop" title="Detener Auto-Presentación y volver a modo manual">
+        <span>⏹</span>
+      </button>
+      <button class="btn-voice-toggle active" id="btn-voice-toggle" title="Voz del Avatar: Activa / Silenciada">
+        <span id="voice-toggle-icon">🔊</span>
+      </button>
     </div>
 
     <div class="header-actions">
@@ -771,6 +1009,26 @@
         </div>
         <div class="purpose-text" id="purpose-description">
           Cargando propósito pedagógico...
+        </div>
+      </div>
+
+      <!-- Avatar Guía Narrador Interactivo con Ondas de Sonido -->
+      <div class="tour-avatar-narrator" id="tour-avatar-narrator">
+        <div class="avatar-speaker-container">
+          <div class="avatar-glow-ring" id="avatar-glow-ring"></div>
+          <img id="tour-avatar-img" class="avatar-speaker-img" src="assets/avatar_nino.png" alt="Avatar Guía">
+          <div class="voice-soundwaves" id="voice-soundwaves">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="avatar-speech-bubble" id="avatar-speech-bubble">
+          <div class="avatar-speech-header">
+            <span class="avatar-badge-tag" id="avatar-speaker-name">Prof. Cuántico • Guía Saber 11</span>
+            <span class="avatar-voice-state-pill" id="avatar-voice-state-pill">Voz Lista</span>
+          </div>
+          <div class="avatar-speech-text" id="avatar-speech-text">
+            ¡Bienvenido a la Misión Saber 11° de Física! Presiona «Auto-Presentación» para recorrer cada punto con narración o haz clic en cualquier número de la hoja.
+          </div>
         </div>
       </div>
 
@@ -837,8 +1095,8 @@
             pageNumber: 208,
             title: "Título de la Misión: Mecánica Clásica",
             shortLabel: "Título Misión",
-            top: 12.6,
-            left: 28.0,
+            top: 13.0,
+            left: 32.0,
             explanation: "Delimita el campo de la Mecánica Clásica conectando la física newtoniana con situaciones reales de la tecnología, la cinemática y la dinámica, superando la visión abstracta y memorística de la materia.",
             pedagogy: "Permite al docente situar el marco epistémico: la física de 11° no evalúa memorizar fórmulas, sino comprender los principios que gobiernan el movimiento y la conservación de la energía en el universo."
           },
@@ -847,8 +1105,8 @@
             pageNumber: 208,
             title: "Objetivo Formativo de la Misión",
             shortLabel: "Objetivo Formativo",
-            top: 17.5,
-            left: 28.0,
+            top: 20.0,
+            left: 32.0,
             explanation: "Declara de manera explícita el estándar del ICFES a desarrollar: reconocer preguntas investigables, plantear procedimientos experimentales adecuados e interpretar datos y gráficas derivadas de experimentos sencillos.",
             pedagogy: "Alinea la expectativa de aprendizaje entre el docente y el estudiante. El estudiante comprende desde el primer minuto bajo qué criterios de competencia será evaluado en la prueba Saber 11."
           },
@@ -857,7 +1115,7 @@
             pageNumber: 208,
             title: "Glosario para la Misión (Indagación)",
             shortLabel: "Glosario Misión",
-            top: 28.7,
+            top: 32.0,
             left: 34.0,
             explanation: "Estandarización de conceptos clave: define formalmente la 'Indagación Científica', el diseño experimental y la recolección de evidencia para homogeneizar el vocabulario técnico.",
             pedagogy: "Elimina la ambigüedad conceptual. El estudiante de 11° debe dominar la distinción entre observación empírica y modelo científico explicativo."
@@ -868,7 +1126,7 @@
             title: "Compendio de la Misión (Mecánica y MRUA)",
             shortLabel: "Compendio Misión",
             top: 55.0,
-            left: 31.0,
+            left: 32.0,
             explanation: "La mecánica clásica estudia cómo se mueven los cuerpos y las fuerzas que influyen en ese movimiento. El MRUA describe desplazamientos en línea recta con aceleración constante. En caída libre la magnitud de la aceleración es g; en un plano inclinado sin rozamiento es a = g · sen(θ). Comprender estos movimientos requiere observar, formular hipótesis y analizar datos para explicar cómo y por qué cambia la velocidad.",
             pedagogy: "Orienta el aprendizaje hacia la comprensión de conceptos y modelos científicos, superando el enfoque tradicional de mecanización de fórmulas matemáticas."
           },
@@ -877,8 +1135,8 @@
             pageNumber: 208,
             title: "Conexión SpaceGec (Diagnóstico en Línea)",
             shortLabel: "Conexión SpaceGec",
-            top: 75.0,
-            left: 13.5,
+            top: 76.0,
+            left: 24.0,
             explanation: "Integración con el ecosistema digital: remite al estudiante a ingresar a la plataforma virtual para completar su prueba de diagnóstico inicial desde casa.",
             pedagogy: "Permite al docente obtener analítica de datos en tiempo real sobre los presaberes de los estudiantes antes de iniciar las clases presenciales."
           }
@@ -902,8 +1160,8 @@
             pageNumber: 209,
             title: "Ficha Técnica Saber (Componente y Evidencia)",
             shortLabel: "Ficha Técnica",
-            top: 21.5,
-            left: 12.5,
+            top: 15.0,
+            left: 24.0,
             explanation: "Muestra explícitamente: Componente Físico (Mecánica Clásica), Competencia (Indagación) y la Evidencia evaluada (Interpreta y analiza datos representados en texto, gráficas, diagramas o tablas).",
             pedagogy: "Desmitifica la prueba estandarizada. El estudiante aprende a 'leer como el evaluador', comprendiendo la estructura de la matriz de competencias del ICFES."
           },
@@ -912,8 +1170,8 @@
             pageNumber: 209,
             title: "Pregunta Modelo (Laboratorio y Datos Experimentales)",
             shortLabel: "Pregunta Modelo",
-            top: 15.0,
-            left: 16.5,
+            top: 26.0,
+            left: 28.0,
             explanation: "Situación problema real: tres estudiantes investigan en el laboratorio cómo influye el ángulo de inclinación en la aceleración de un bloque (15°, 30°, 45°) midiendo tiempos de recorrido de 1 m (2.9 s, 1.8 s, 1.4 s). Un estudiante afirma: 'La aceleración aumenta al aumentar el ángulo del plano'. ¿Cuál es el procedimiento más adecuado para comprobarlo?",
             pedagogy: "Modela la lectura comprensiva de situaciones experimentales tipo ICFES donde se debe evaluar la coherencia metodológica de una comprobación empírica."
           },
@@ -922,8 +1180,8 @@
             pageNumber: 209,
             title: "Avatar Guía (Orientación Metacognitiva)",
             shortLabel: "Avatar Guía",
-            top: 16.0,
-            left: 70.0,
+            top: 22.0,
+            left: 74.0,
             explanation: "Instrucción del avatar: 'Antes de elegir la opción definitiva, verifiquemos si tu hipótesis es correcta. Avanza a las siguientes actividades, donde encontrarás la información esencial para sustentar tu respuesta con evidencia'.",
             pedagogy: "Promueve la pausa reflexiva y la autorregulación: enseña a no responder impulsivamente y a buscar evidencia antes de tomar una decisión."
           },
@@ -932,8 +1190,8 @@
             pageNumber: 209,
             title: "Apuntes para la Misión (Pistas y Recursos Clave)",
             shortLabel: "Apuntes de Misión",
-            top: 36.2,
-            left: 60.0,
+            top: 48.0,
+            left: 70.0,
             explanation: "Caja de herramientas de lectura rápida: rastreo de pistas (si piden predecir o comprobar es indagación), errores comunes (cambiar más de una variable a la vez) y recursos clave (fórmulas a = 2d / t² y a = g · sen(θ)).",
             pedagogy: "Herramienta de andamiaje cognitivo que ayuda al estudiante a filtrar distractores procedimentales."
           },
@@ -942,8 +1200,8 @@
             pageNumber: 210,
             title: "Actividad 1: Reto de Competencias",
             shortLabel: "Actividad 1",
-            top: 10.4,
-            left: 17.0,
+            top: 16.0,
+            left: 26.0,
             explanation: "Ejercicio guiado para aprender a reconocer las preguntas de indagación, identificando cuáles piden comprobar hipótesis o proponer procedimientos versus aquellas de cálculo directo.",
             pedagogy: "Entrena al estudiante para identificar la intención evaluativa de cada ítem de la prueba Saber 11."
           },
@@ -952,8 +1210,8 @@
             pageNumber: 210,
             title: "Actividad 2: Predice el Patrón",
             shortLabel: "Actividad 2",
-            top: 62.4,
-            left: 17.0,
+            top: 60.0,
+            left: 26.0,
             explanation: "A partir de una tabla de datos experimentales (20°: 2.6 s, 40°: 1.9 s, 50°: 1.6 s), el estudiante predice si para 60° el tiempo será mayor o menor a 1.6 s y diseña cómo comprobarlo experimentalmente.",
             pedagogy: "Desarrolla la competencia de predicción y extrapolación de regularidades científicas a partir de evidencia experimental."
           },
@@ -962,8 +1220,8 @@
             pageNumber: 211,
             title: "Avatar de la Página 211 (Del Análisis a la Decisión)",
             shortLabel: "Avatar Pág. 211",
-            top: 11.5,
-            left: 20.0,
+            top: 14.0,
+            left: 30.0,
             explanation: "Mensaje motivador del avatar: 'Estás a punto de completar la Zona de entrenamiento y ya tienes lo necesario para descubrir la solución. Ahora analizarás la anatomía de la respuesta para comprender por qué una opción es correcta y cómo evitar los distractores'.",
             pedagogy: "Refuerza la autoeficacia y prepara la transición hacia el análisis metacognitivo de opciones."
           },
@@ -972,8 +1230,8 @@
             pageNumber: 211,
             title: "Anatomía de la Respuesta (5 Pasos Metacognitivos)",
             shortLabel: "Anatomía Respuesta",
-            top: 21.5,
-            left: 16.5,
+            top: 25.0,
+            left: 28.0,
             explanation: "Desglose sistemático de los 5 pasos: Paso 1 (Reconoce el fenómeno o modelo), Paso 2 (Ubica la relación causa-efecto), Paso 3 (Conecta conceptos conocidos), Paso 4 (Evalúa críticamente opciones) y Paso 5 (Verifica la lógica completa).",
             pedagogy: "Estructura el proceso de pensamiento que un estudiante de alto puntaje aplica de forma sistemática frente a cualquier ítem complejo."
           },
@@ -982,8 +1240,8 @@
             pageNumber: 211,
             title: "Análisis de la Clave Correcta y Distractores",
             shortLabel: "Análisis de la Clave",
-            top: 26.0,
-            left: 12.0,
+            top: 40.0,
+            left: 28.0,
             explanation: "La opción A es la clave correcta: calcular la aceleración usando los datos de tiempo existentes con a = 2d / t² confirma la hipótesis sin añadir variables. Se descartan B (la masa es irrelevante), C (la velocidad inicial es cero) y D (cambiar el material altera el rozamiento, invalidando el experimento).",
             pedagogy: "Enseña la técnica del descarte fundamentado: comprender por qué cada distractor es una trampa conceptual típica del examen de Estado."
           },
@@ -992,8 +1250,8 @@
             pageNumber: 211,
             title: "Del Análisis a la Decisión (Decidir con Evidencias)",
             shortLabel: "Del Análisis a Decisión",
-            top: 53.7,
-            left: 18.0,
+            top: 66.0,
+            left: 30.0,
             explanation: "Cierre metodológico: este tipo de preguntas no busca repetir fórmulas de memoria, sino analizar la información para descubrir relaciones entre datos y conceptos, y decidir con base en evidencias.",
             pedagogy: "Sintetiza la competencia de indagación: la ciencia es un proceso de toma de decisiones argumentadas a partir de pruebas empíricas."
           }
@@ -1017,8 +1275,8 @@
             pageNumber: 212,
             title: "Paso 3: Bitácora de la Misión (Mecánica Clásica)",
             shortLabel: "Bitácora Misión",
-            top: 21.5,
-            left: 12.0,
+            top: 18.0,
+            left: 25.0,
             explanation: "Introducción conceptual al estudio de por qué y cómo se mueven los cuerpos: desde la descripción geométrica del movimiento hasta las causas (fuerzas y masa).",
             pedagogy: "Establece la narrativa disciplinar: la bitácora es el cuaderno de campo del científico donde se registran leyes universales que rigen desde satélites hasta vehículos."
           },
@@ -1027,8 +1285,8 @@
             pageNumber: 212,
             title: "Pilar 1: Movimiento Rectilíneo Uniforme y Acelerado",
             shortLabel: "Pilar 1: MRU / MRUA",
-            top: 53.5,
-            left: 12.0,
+            top: 52.0,
+            left: 25.0,
             explanation: "Sistematización de ecuaciones de movimiento: velocidad constante vs. aceleración constante, junto con la interpretación de pendientes en gráficas de posición y velocidad.",
             pedagogy: "Prepara para la lectura de gráficas: la pendiente de posición-tiempo es la velocidad, y la pendiente de velocidad-tiempo es la aceleración."
           },
@@ -1037,8 +1295,8 @@
             pageNumber: 213,
             title: "Pilar 2: Caída Libre y Aceleración Gravitatoria",
             shortLabel: "Pilar 2: Gravedad",
-            top: 10.5,
-            left: 12.0,
+            top: 18.0,
+            left: 25.0,
             explanation: "Análisis del caso particular donde la aceleración es debida exclusivamente a la atracción gravitatoria terrestre (g ≈ 9.8 m/s²), independiente de la masa del objeto.",
             pedagogy: "Corrige una idea previa errónea muy arraigada: los cuerpos pesados NO caen más rápido en el vacío; la aceleración gravitatoria es universal para todos."
           },
@@ -1047,8 +1305,8 @@
             pageNumber: 213,
             title: "Cálculos Paso a Paso: Análisis Cuantitativo",
             shortLabel: "Cálculos Paso a Paso",
-            top: 10.5,
-            left: 56.0,
+            top: 18.0,
+            left: 68.0,
             explanation: "Ejemplo modelado de cálculo de velocidad de impacto y tiempo de vuelo (v = v₀ + gt, y = 20 - 4.9(1.0)² = 15.1 m), demostrando cómo sustituir valores con unidades físicas consistentes en el SI.",
             pedagogy: "Enseña orden algorítmico y control de unidades dimensionales, evitando errores aritméticos por conversión de unidades en la prueba."
           },
@@ -1057,8 +1315,8 @@
             pageNumber: 214,
             title: "Pilar 3: Fuerzas en Plano Inclinado y Vectores",
             shortLabel: "Pilar 3: Vectores",
-            top: 17.5,
-            left: 34.0,
+            top: 18.0,
+            left: 35.0,
             explanation: "Descomposición trigonométrica del vector peso en componentes paralela (mg · sen(θ)) y perpendicular (mg · cos(θ)), junto con la fuerza normal y fricción.",
             pedagogy: "Permite al estudiante dominar el análisis vectorial: entender qué fuerza causa realmente la aceleración hacia abajo en una rampa."
           },
@@ -1067,8 +1325,8 @@
             pageNumber: 214,
             title: "Actividad en el Aula (Laboratorio y Diagramas)",
             shortLabel: "Actividad en Aula",
-            top: 35.8,
-            left: 17.0,
+            top: 48.0,
+            left: 28.0,
             explanation: "Diagrama vectorial incompleto para que el estudiante trace vectores faltantes, calcule aceleraciones y discuta en equipo con sus compañeros.",
             pedagogy: "Fomenta el aprendizaje cooperativo y la argumentación científica en el aula antes de enfrentarse a la prueba individual sumativa."
           }
@@ -1091,8 +1349,8 @@
             pageNumber: 215,
             title: "Prueba de Campo (10 Preguntas Tipo Saber - Entrenamiento ICFES)",
             shortLabel: "Prueba de Campo",
-            top: 22.4,
-            left: 22.0,
+            top: 18.0,
+            left: 30.0,
             explanation: "Batería de evaluación sumativa de 10 preguntas tipo Saber 11 bajo la Estructura Basada en Evidencias (EBE). El estudiante se enfrenta al formato real con tiempos controlados, lectura de contextos experimentales y relleno de óvalos.",
             pedagogy: "Simula las condiciones reales del examen ICFES, entrenando la gestión del tiempo y la resistencia cognitiva."
           },
@@ -1101,8 +1359,8 @@
             pageNumber: 218,
             title: "Ítem 10: Situación Problema del Automóvil",
             shortLabel: "Ítem 10",
-            top: 11.5,
-            left: 12.0,
+            top: 16.0,
+            left: 26.0,
             explanation: "Pregunta de indagación y modelado: un automóvil acelera desde el reposo, mantiene velocidad constante durante un tramo y finalmente frena uniformemente hasta detenerse. Los estudiantes deben seleccionar la gráfica de velocidad (v) frente a tiempo (t) correspondiente.",
             pedagogy: "Evalúa la traducción de lenguaje verbal descriptivo a lenguaje gráfico representacional."
           },
@@ -1111,8 +1369,8 @@
             pageNumber: 218,
             title: "Opciones de Respuestas del Ítem 10 (Lectura de Pendientes)",
             shortLabel: "Opciones Ítem 10",
-            top: 21.0,
-            left: 14.5,
+            top: 32.0,
+            left: 26.0,
             explanation: "Análisis de las 4 opciones de gráficos v vs. t: la gráfica correcta debe mostrar pendiente positiva al inicio (aceleración uniforme), pendiente horizontal cero en el centro (velocidad constante) y pendiente negativa final (frenado uniforme).",
             pedagogy: "Afianza el significado físico de la derivada/pendiente en cinemática: la pendiente de la gráfica v vs. t representa físicamente la aceleración."
           },
@@ -1122,7 +1380,7 @@
             title: "Conexión SpaceGec (15 Preguntas Virtuales de Profundización)",
             shortLabel: "SpaceGec Virtual",
             top: 65.0,
-            left: 28.0,
+            left: 30.0,
             explanation: "Continúa tu entrenamiento: el libro físico termina aquí, pero el ecosistema digital continúa. Se invita al estudiante a ingresar a la plataforma virtual y responder 15 preguntas del reto en línea.",
             pedagogy: "Permite una evaluación formativa extendida con retroalimentación automática y generación de analítica de aprendizaje para el docente."
           },
@@ -1131,10 +1389,10 @@
             pageNumber: 218,
             title: "Cierre de la Misión y Consolidación de Competencias",
             shortLabel: "Cierre de Misión",
-            top: 72.0,
-            left: 40.0,
+            top: 76.0,
+            left: 42.0,
             explanation: "Mensaje final: 'Final de la Misión … Cargando datos. Esta Misión abordó la mecánica clásica desde tres competencias: explicación de fenómenos, uso del conocimiento e indagación... La siguiente misión profundizará en procesos energéticos (Termodinámica)'.",
-            pedagogy: "Cierra el ciclo pedagógico reforzando el sentido de autoeficacia y preparando la articulación con el siguiente componente disciplinar."
+            pedagogy: "Cierre el ciclo pedagógico reforzando el sentido de autoeficacia y preparando la articulación con el siguiente componente disciplinar."
           }
         ]
       }
@@ -1184,6 +1442,13 @@
         this.zoomStartTimer = null;
         this.zoomReturnTimer = null;
 
+        // Estado del Modo Auto-Presentación y Voz
+        this.isAutoTourRunning = false;
+        this.isAutoTourPaused = false;
+        this.isVoiceEnabled = true;
+        this.selectedSpeechVoice = null;
+        this.autoTourTimer = null;
+
         // Elementos DOM
         this.stepperNav = document.getElementById("stepper-nav");
         this.pageSubtabsBar = document.getElementById("page-subtabs-bar");
@@ -1206,10 +1471,23 @@
         this.detailPedagogy = document.getElementById("detail-pedagogy");
         this.btnFocusItem = document.getElementById("btn-focus-item");
 
+        // Elementos de Auto-Presentación y Avatar
+        this.btnAutoTour = document.getElementById("btn-auto-tour");
+        this.btnAutoStop = document.getElementById("btn-auto-stop");
+        this.btnVoiceToggle = document.getElementById("btn-voice-toggle");
+        this.autoTourIcon = document.getElementById("auto-tour-icon");
+        this.autoTourLabel = document.getElementById("auto-tour-label");
+        this.voiceToggleIcon = document.getElementById("voice-toggle-icon");
+
+        this.avatarNarrator = document.getElementById("tour-avatar-narrator");
+        this.avatarVoiceState = document.getElementById("avatar-voice-state-pill");
+        this.avatarSpeechText = document.getElementById("avatar-speech-text");
+
         this.init();
       }
 
       init() {
+        this.initSpeech();
         this.renderStepperNav();
         this.loadStep(0);
 
@@ -1219,12 +1497,269 @@
           if (item) this.triggerSectionZoom(item);
         });
 
+        // Controles de Auto-Presentación
+        if (this.btnAutoTour) {
+          this.btnAutoTour.addEventListener("click", () => {
+            if (!this.isAutoTourRunning) {
+              this.startAutoTour();
+            } else if (this.isAutoTourPaused) {
+              this.resumeAutoTour();
+            } else {
+              this.pauseAutoTour();
+            }
+          });
+        }
+
+        if (this.btnAutoStop) {
+          this.btnAutoStop.addEventListener("click", () => this.stopAutoTour());
+        }
+
+        if (this.btnVoiceToggle) {
+          this.btnVoiceToggle.addEventListener("click", () => {
+            this.isVoiceEnabled = !this.isVoiceEnabled;
+            this.btnVoiceToggle.classList.toggle("active", this.isVoiceEnabled);
+            this.btnVoiceToggle.classList.toggle("muted", !this.isVoiceEnabled);
+            this.voiceToggleIcon.textContent = this.isVoiceEnabled ? "🔊" : "🔇";
+            if (this.avatarVoiceState) {
+              this.avatarVoiceState.textContent = this.isVoiceEnabled ? "Voz Activa" : "Voz Silenciada";
+            }
+            if (!this.isVoiceEnabled) {
+              this.stopSpeech();
+            }
+          });
+        }
+
         // Soporte de Teclado
         window.addEventListener("keydown", (e) => {
           if (e.key === "ArrowRight") this.navigateItem(1);
           if (e.key === "ArrowLeft") this.navigateItem(-1);
           if (e.key === "Escape" || e.key === "0") this.resetZoom();
         });
+      }
+
+      initSpeech() {
+        if (!('speechSynthesis' in window)) {
+          if (this.avatarVoiceState) {
+            this.avatarVoiceState.textContent = "Modo Texto";
+          }
+          return;
+        }
+
+        const pickVoice = () => {
+          const voices = window.speechSynthesis.getVoices();
+          if (!voices || voices.length === 0) return;
+
+          const esVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("es"));
+          this.selectedSpeechVoice = 
+            esVoices.find(v => /colombia|latam|mexico|spanish/i.test(v.name)) ||
+            esVoices.find(v => /google|microsoft|natural/i.test(v.name)) ||
+            esVoices[0] ||
+            null;
+
+          if (this.avatarVoiceState) {
+            this.avatarVoiceState.textContent = this.selectedSpeechVoice ? "Voz Lista" : "Voz Disponible";
+          }
+        };
+
+        pickVoice();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+          window.speechSynthesis.onvoiceschanged = pickVoice;
+        }
+      }
+
+      cleanTextForSpeech(text) {
+        if (!text) return "";
+        return text
+          .replace(/<[^>]+>/g, " ")
+          .replace(/g\s*≈\s*9\.8\s*m\/s²/g, "gravedad aproximada de 9.8 metros por segundo al cuadrado")
+          .replace(/\$g\s*\\approx\s*9\.8\\text\{\s*m\/s\}\^2\$/g, "gravedad aproximada de 9.8 metros por segundo al cuadrado")
+          .replace(/a\s*=\s*g\s*·\s*sen\(θ\)/g, "la aceleración es igual a la gravedad por el seno del ángulo theta")
+          .replace(/\$a\s*=\s*g\s*\\cdot\s*\\text\{sen\}\(\\theta\)\$/g, "la aceleración es igual a la gravedad por el seno del ángulo theta")
+          .replace(/a\s*=\s*2d\s*\/\s*t²/g, "la aceleración es igual a dos veces la distancia dividida entre el tiempo al cuadrado")
+          .replace(/\$a\s*=\s*2d\/t\^2\$/g, "la aceleración es igual a dos veces la distancia dividida entre el tiempo al cuadrado")
+          .replace(/E\s*=\s*mc²/gi, "E igual a m por c al cuadrado")
+          .replace(/MRUA/g, "M R U A, movimiento rectilíneo uniformemente acelerado")
+          .replace(/ICFES/g, "Icfes")
+          .replace(/SpaceGec/g, "Space Yec")
+          .replace(/θ/g, "theta")
+          .replace(/\$/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      setAvatarSpeaking(isSpeaking) {
+        if (!this.avatarNarrator) return;
+        this.avatarNarrator.classList.toggle("speaking", !!isSpeaking);
+        if (this.avatarVoiceState) {
+          if (isSpeaking) {
+            this.avatarVoiceState.textContent = "Narrando...";
+            this.avatarVoiceState.style.borderColor = "var(--hud-cyan-electric)";
+            this.avatarVoiceState.style.color = "var(--energy-gold-bright)";
+          } else {
+            this.avatarVoiceState.textContent = this.isVoiceEnabled ? "Voz Lista" : "Silenciada";
+            this.avatarVoiceState.style.borderColor = "";
+            this.avatarVoiceState.style.color = "";
+          }
+        }
+      }
+
+      stopSpeech() {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        this.setAvatarSpeaking(false);
+      }
+
+      speakTourNarration(title, explanation, pedagogy, onCompleteCallback) {
+        this.stopSpeech();
+        clearTimeout(this.autoTourTimer);
+
+        const speechText = `${this.cleanTextForSpeech(title)}. ${this.cleanTextForSpeech(explanation)}`;
+
+        if (this.avatarSpeechText) {
+          this.avatarSpeechText.textContent = speechText;
+        }
+
+        if (!this.isVoiceEnabled || !('speechSynthesis' in window)) {
+          if (this.isAutoTourRunning && !this.isAutoTourPaused) {
+            const simulatedTime = Math.max(3500, Math.min(8000, speechText.length * 35));
+            this.autoTourTimer = setTimeout(() => {
+              if (onCompleteCallback) onCompleteCallback();
+            }, simulatedTime);
+          }
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(speechText);
+        if (this.selectedSpeechVoice) utterance.voice = this.selectedSpeechVoice;
+        utterance.lang = this.selectedSpeechVoice ? this.selectedSpeechVoice.lang : "es-ES";
+        utterance.rate = 0.98;
+        utterance.pitch = 1.02;
+
+        utterance.onstart = () => {
+          this.setAvatarSpeaking(true);
+        };
+
+        utterance.onend = () => {
+          this.setAvatarSpeaking(false);
+          if (onCompleteCallback && this.isAutoTourRunning && !this.isAutoTourPaused) {
+            this.autoTourTimer = setTimeout(() => {
+              onCompleteCallback();
+            }, 1200);
+          }
+        };
+
+        utterance.onerror = () => {
+          this.setAvatarSpeaking(false);
+          if (onCompleteCallback && this.isAutoTourRunning && !this.isAutoTourPaused) {
+            onCompleteCallback();
+          }
+        };
+
+        window.speechSynthesis.speak(utterance);
+      }
+
+      startAutoTour() {
+        this.isAutoTourRunning = true;
+        this.isAutoTourPaused = false;
+        this.updateAutoTourUI();
+
+        const step = this.getCurrentStep();
+        if (!step) return;
+
+        this.activeItemNum = step.items[0].num;
+        this.executeCurrentAutoStep();
+      }
+
+      resumeAutoTour() {
+        this.isAutoTourPaused = false;
+        this.updateAutoTourUI();
+        this.executeCurrentAutoStep();
+      }
+
+      pauseAutoTour() {
+        this.isAutoTourPaused = true;
+        clearTimeout(this.autoTourTimer);
+        this.stopSpeech();
+        this.updateAutoTourUI();
+      }
+
+      stopAutoTour() {
+        this.isAutoTourRunning = false;
+        this.isAutoTourPaused = false;
+        clearTimeout(this.autoTourTimer);
+        this.stopSpeech();
+        this.updateAutoTourUI();
+        this.resetZoom();
+      }
+
+      updateAutoTourUI() {
+        if (!this.btnAutoTour) return;
+
+        if (this.isAutoTourRunning && !this.isAutoTourPaused) {
+          this.btnAutoTour.classList.add("running");
+          this.autoTourIcon.textContent = "⏸";
+          this.autoTourLabel.textContent = "Pausar Auto";
+          if (this.btnAutoStop) this.btnAutoStop.classList.remove("hidden");
+        } else if (this.isAutoTourRunning && this.isAutoTourPaused) {
+          this.btnAutoTour.classList.remove("running");
+          this.autoTourIcon.textContent = "▶";
+          this.autoTourLabel.textContent = "Reanudar";
+          if (this.btnAutoStop) this.btnAutoStop.classList.remove("hidden");
+        } else {
+          this.btnAutoTour.classList.remove("running");
+          this.autoTourIcon.textContent = "▶";
+          this.autoTourLabel.textContent = "Auto-Presentación";
+          if (this.btnAutoStop) this.btnAutoStop.classList.add("hidden");
+        }
+      }
+
+      executeCurrentAutoStep() {
+        if (!this.isAutoTourRunning || this.isAutoTourPaused) return;
+
+        const step = this.getCurrentStep();
+        const item = step.items.find(i => i.num === this.activeItemNum) || step.items[0];
+
+        if (this.currentPageNumber !== item.pageNumber) {
+          this.switchPage(item.pageNumber, item.num);
+        } else {
+          this.selectItem(item.num, true, false);
+        }
+
+        this.speakTourNarration(item.title, item.explanation, item.pedagogy, () => {
+          this.advanceAutoTourNext();
+        });
+      }
+
+      advanceAutoTourNext() {
+        if (!this.isAutoTourRunning || this.isAutoTourPaused) return;
+
+        const step = this.getCurrentStep();
+        const currentIndex = step.items.findIndex(i => i.num === this.activeItemNum);
+
+        if (currentIndex < step.items.length - 1) {
+          const nextItem = step.items[currentIndex + 1];
+          this.activeItemNum = nextItem.num;
+          this.executeCurrentAutoStep();
+        } else {
+          // Si quedan más pasos, avanzar al siguiente paso
+          if (this.currentStepIndex < FISICA_STEPS_DATA.length - 1) {
+            this.loadStep(this.currentStepIndex + 1);
+            const nextStep = this.getCurrentStep();
+            this.activeItemNum = nextStep.items[0].num;
+            this.autoTourTimer = setTimeout(() => {
+              this.executeCurrentAutoStep();
+            }, 1400);
+          } else {
+            this.stopSpeech();
+            this.isAutoTourRunning = false;
+            this.isAutoTourPaused = false;
+            this.updateAutoTourUI();
+            if (this.avatarSpeechText) {
+              this.avatarSpeechText.textContent = "🎉 ¡Misión completada con éxito! Has recorrido todos los pasos del tour pedagógico de Física 11°.";
+            }
+          }
+        }
       }
 
       getCurrentStep() {
@@ -1368,7 +1903,7 @@
         });
       }
 
-      selectItem(itemNum, autoZoom = false) {
+      selectItem(itemNum, autoZoom = false, shouldSpeak = true) {
         this.activeItemNum = itemNum;
         const step = this.getCurrentStep();
         const item = step.items.find(i => i.num === itemNum);
@@ -1399,6 +1934,10 @@
 
         if (autoZoom) {
           this.triggerSectionZoom(item);
+        }
+
+        if (shouldSpeak && this.isVoiceEnabled && !this.isAutoTourRunning) {
+          this.speakTourNarration(item.title, item.explanation, item.pedagogy);
         }
       }
 
