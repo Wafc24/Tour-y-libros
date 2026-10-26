@@ -100,6 +100,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   const btnTourZoomAction = document.getElementById("btn-tour-zoom-action");
   const btnTourToFlipbook = document.getElementById("btn-tour-to-flipbook");
 
+  // Elementos de Auto-Presentación y Avatar Narrador
+  const btnAutoTour = document.getElementById("btn-auto-tour");
+  const autoTourIcon = document.getElementById("auto-tour-icon");
+  const autoTourLabel = document.getElementById("auto-tour-label");
+  const btnAutoStop = document.getElementById("btn-auto-stop");
+  const btnVoiceToggle = document.getElementById("btn-voice-toggle");
+  const voiceToggleIcon = document.getElementById("voice-toggle-icon");
+  const tourAvatarNarrator = document.getElementById("tour-avatar-narrator");
+  const tourAvatarImg = document.getElementById("tour-avatar-img");
+  const avatarSpeakerName = document.getElementById("avatar-speaker-name");
+  const avatarVoiceStatePill = document.getElementById("avatar-voice-state-pill");
+  const avatarSpeechText = document.getElementById("avatar-speech-text");
+  const tourPageFrame = document.getElementById("tour-page-frame");
+
   // Elementos Hub
   const hubCardsGrid = document.getElementById("hub-cards-grid");
   const hubFilterBtns = document.querySelectorAll(".hub-tab-btn");
@@ -1060,6 +1074,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     tourPurposeBadge.textContent = step.badge;
     tourPurposeText.innerHTML = formatMathText(step.purpose);
 
+    // Actualizar identidad del avatar según la fase/paso
+    if (step.avatar && tourAvatarImg) {
+      tourAvatarImg.src = step.avatar.src || "assets/avatar_nino.png";
+      if (avatarSpeakerName) {
+        avatarSpeakerName.textContent = `${step.avatar.name} • ${step.avatar.role}`;
+      }
+    }
+
     renderTourSubtabs(step.pages);
     renderTourPointsChips(step.items);
 
@@ -1096,16 +1118,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tourPageImg.style.opacity = "0.2";
     tourPageImg.src = pageCfg.imageSrc;
-    tourPageImg.onload = () => { tourPageImg.style.opacity = "1"; };
-
-    renderTourHotspots(pageNum);
-
-    if (focusItemNum !== null) {
-      selectTourItem(focusItemNum);
-    } else {
-      const first = step.items.find(i => i.pageNumber === pageNum);
-      if (first) selectTourItem(first.num);
-    }
+    tourPageImg.onload = () => {
+      tourPageImg.style.opacity = "1";
+      renderTourHotspots(pageNum);
+      if (focusItemNum !== null) {
+        selectTourItem(focusItemNum);
+      } else {
+        const first = step.items.find(i => i.pageNumber === pageNum);
+        if (first) selectTourItem(first.num);
+      }
+    };
   }
 
   function renderTourHotspots(pageNum) {
@@ -1123,7 +1145,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       pin.textContent = item.num;
       pin.title = item.title;
 
-      pin.addEventListener("click", () => selectTourItem(item.num, true));
+      pin.addEventListener("click", () => {
+        if (isAutoTourRunning) pauseAutoTour();
+        selectTourItem(item.num, true, true);
+      });
       tourHotspotsLayer.appendChild(pin);
     });
   }
@@ -1140,17 +1165,126 @@ document.addEventListener("DOMContentLoaded", async () => {
         <span class="tour-point-chip-label">${item.shortLabel}</span>
       `;
       chip.addEventListener("click", () => {
+        if (isAutoTourRunning) pauseAutoTour();
         if (currentTourPageNum !== item.pageNumber) {
           switchTourPage(item.pageNumber, item.num);
         } else {
-          selectTourItem(item.num, true);
+          selectTourItem(item.num, true, true);
         }
       });
       tourPointsSelector.appendChild(chip);
     });
   }
 
-  function selectTourItem(itemNum, triggerZoom = false) {
+  // -------------------------------------------------------------------------
+  // MOTOR DE SÍNTESIS DE VOZ Y AUTO-PRESENTACIÓN NARRADA (100% OFFLINE)
+  // -------------------------------------------------------------------------
+  let isAutoTourRunning = false;
+  let isAutoTourPaused = false;
+  let isVoiceEnabled = true;
+  let autoTourTimer = null;
+  let selectedSpeechVoice = null;
+
+  function initSpeechVoices() {
+    if (!('speechSynthesis' in window)) return;
+    const updateVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      selectedSpeechVoice = voices.find(v => v.lang && (v.lang.startsWith("es-") || v.lang === "es")) || voices[0];
+    };
+    updateVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = updateVoices;
+    }
+  }
+  initSpeechVoices();
+
+  function cleanTextForSpeech(text) {
+    if (!text) return "";
+    return text
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\(g\s*≈\s*9\.8\s*m\/s²\)/gi, "gravedad de 9.8 metros por segundo al cuadrado")
+      .replace(/g\s*≈\s*9\.8\s*m\/s²/gi, "gravedad de 9.8 metros por segundo al cuadrado")
+      .replace(/E\s*=\s*mc²/gi, "E igual a m c al cuadrado")
+      .replace(/a\s*=\s*g\s*·\s*sen\(θ\)/gi, "aceleración igual a gravedad por seno del ángulo")
+      .replace(/a\s*=\s*2d\s*\/\s*t²/gi, "aceleración igual a dos veces la distancia entre tiempo al cuadrado")
+      .replace(/MRU\s*\/\s*MRUA/gi, "Movimiento Rectilíneo Uniforme y Acelerado")
+      .replace(/ICFES/gi, "Icfes")
+      .replace(/Pág\.\s*/gi, "Página ")
+      .replace(/[\$•]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function setAvatarSpeaking(isSpeaking) {
+    if (tourAvatarNarrator) {
+      tourAvatarNarrator.classList.toggle("speaking", isSpeaking);
+    }
+    if (avatarVoiceStatePill) {
+      avatarVoiceStatePill.textContent = isSpeaking ? "Narrando..." : (isVoiceEnabled ? "Voz Activa" : "Silenciado");
+      avatarVoiceStatePill.style.color = isSpeaking ? "var(--color-yellow)" : "";
+      avatarVoiceStatePill.style.borderColor = isSpeaking ? "var(--color-yellow)" : "";
+    }
+  }
+
+  function stopSpeech() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setAvatarSpeaking(false);
+  }
+
+  function speakTourNarration(title, explanation, pedagogy, onCompleteCallback) {
+    stopSpeech();
+    clearTimeout(autoTourTimer);
+
+    const speechText = `${cleanTextForSpeech(title)}. ${cleanTextForSpeech(explanation)}`;
+
+    if (avatarSpeechText) {
+      avatarSpeechText.textContent = speechText;
+    }
+
+    if (!isVoiceEnabled || !('speechSynthesis' in window)) {
+      if (isAutoTourRunning && !isAutoTourPaused) {
+        const simulatedTime = Math.max(3500, Math.min(8000, speechText.length * 35));
+        autoTourTimer = setTimeout(() => {
+          if (onCompleteCallback) onCompleteCallback();
+        }, simulatedTime);
+      }
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(speechText);
+    if (selectedSpeechVoice) utterance.voice = selectedSpeechVoice;
+    utterance.lang = selectedSpeechVoice ? selectedSpeechVoice.lang : "es-ES";
+    utterance.rate = 0.98;
+    utterance.pitch = 1.02;
+
+    utterance.onstart = () => {
+      setAvatarSpeaking(true);
+    };
+
+    utterance.onend = () => {
+      setAvatarSpeaking(false);
+      if (isAutoTourRunning && !isAutoTourPaused) {
+        autoTourTimer = setTimeout(() => {
+          if (onCompleteCallback) onCompleteCallback();
+        }, 1600);
+      }
+    };
+
+    utterance.onerror = () => {
+      setAvatarSpeaking(false);
+      if (isAutoTourRunning && !isAutoTourPaused) {
+        autoTourTimer = setTimeout(() => {
+          if (onCompleteCallback) onCompleteCallback();
+        }, 3000);
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function selectTourItem(itemNum, triggerZoom = false, shouldSpeak = false) {
     currentTourItemNum = itemNum;
     const step = activeTourData.steps[currentTourStepIndex];
     const item = step.items.find(i => i.num === itemNum);
@@ -1174,12 +1308,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     tourExplBody.innerHTML = formatMathText(item.explanation);
     tourExplPedagogy.innerHTML = `💡 Enfoque Pedagógico: ${formatMathText(item.pedagogy)}`;
 
+    if (avatarSpeechText) {
+      avatarSpeechText.textContent = `${cleanTextForSpeech(item.title)}: ${cleanTextForSpeech(item.explanation)}`;
+    }
+
     btnTourToFlipbook.onclick = () => {
       setAppMode("flipbook", { bookId: activeTourData.bookId, page: item.pageNumber });
     };
 
     if (triggerZoom) {
       triggerTourSectionZoom(item);
+    }
+
+    if (shouldSpeak && isVoiceEnabled && !isAutoTourRunning) {
+      speakTourNarration(item.title, item.explanation, item.pedagogy);
     }
   }
 
@@ -1193,15 +1335,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     tourZoomStatus.innerHTML = `📄 Hoja completa • Enfocando punto ${item.num}...`;
 
     tourZoomTimer1 = setTimeout(() => {
-      const originX = Math.max(12, Math.min(88, item.left));
-      const originY = Math.max(12, Math.min(88, item.top));
+      const originX = Math.max(15, Math.min(85, item.left));
+      const originY = Math.max(15, Math.min(85, item.top));
       tourZoomWrapper.style.transformOrigin = `${originX}% ${originY}%`;
       tourZoomWrapper.style.transform = "scale(1.95)";
-      tourZoomStatus.innerHTML = `🔍 Ampliando ${item.shortLabel} (1.95x) • Vuelve a vista general en 3.8s`;
+      tourZoomStatus.innerHTML = `🔍 Ampliando ${item.shortLabel} (1.95x) • Vuelve a vista general en 4s`;
 
       tourZoomTimer2 = setTimeout(() => {
         resetTourZoom();
-      }, 3800);
+      }, 4000);
     }, 150);
   }
 
@@ -1215,6 +1357,137 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (tourZoomStatus) {
       tourZoomStatus.innerHTML = "📄 Vista de hoja completa (100%) • Clic en un número para inspeccionar";
     }
+  }
+
+  // Lógica del modo Auto-Presentación
+  function updateAutoTourUI() {
+    if (!btnAutoTour) return;
+    if (isAutoTourRunning) {
+      btnAutoTour.classList.add("running");
+      btnAutoTour.classList.remove("paused");
+      if (autoTourIcon) autoTourIcon.textContent = "⏸";
+      if (autoTourLabel) autoTourLabel.textContent = "Pausar";
+      if (btnAutoStop) btnAutoStop.classList.remove("hidden");
+    } else if (isAutoTourPaused) {
+      btnAutoTour.classList.remove("running");
+      btnAutoTour.classList.add("paused");
+      if (autoTourIcon) autoTourIcon.textContent = "▶";
+      if (autoTourLabel) autoTourLabel.textContent = "Reanudar";
+      if (btnAutoStop) btnAutoStop.classList.remove("hidden");
+    } else {
+      btnAutoTour.classList.remove("running");
+      btnAutoTour.classList.remove("paused");
+      if (autoTourIcon) autoTourIcon.textContent = "▶";
+      if (autoTourLabel) autoTourLabel.textContent = "Auto-Presentación";
+      if (btnAutoStop) btnAutoStop.classList.add("hidden");
+    }
+  }
+
+  function startAutoTour() {
+    isAutoTourRunning = true;
+    isAutoTourPaused = false;
+    updateAutoTourUI();
+    executeCurrentAutoStep();
+  }
+
+  function pauseAutoTour() {
+    isAutoTourRunning = false;
+    isAutoTourPaused = true;
+    clearTimeout(autoTourTimer);
+    stopSpeech();
+    updateAutoTourUI();
+  }
+
+  function stopAutoTour() {
+    isAutoTourRunning = false;
+    isAutoTourPaused = false;
+    clearTimeout(autoTourTimer);
+    stopSpeech();
+    updateAutoTourUI();
+    resetTourZoom();
+    if (avatarSpeechText) {
+      avatarSpeechText.textContent = "Auto-presentación detenida. Puedes explorar manualmente los puntos haciendo clic en cualquiera de ellos.";
+    }
+  }
+
+  function executeCurrentAutoStep() {
+    if (!isAutoTourRunning || isAutoTourPaused) return;
+
+    const step = activeTourData.steps[currentTourStepIndex];
+    if (!step) return;
+
+    let item = step.items.find(i => i.num === currentTourItemNum);
+    if (!item) {
+      item = step.items[0];
+      currentTourItemNum = item.num;
+    }
+
+    selectTourItem(item.num, true, false);
+
+    speakTourNarration(item.title, item.explanation, item.pedagogy, () => {
+      advanceAutoTourNext();
+    });
+  }
+
+  function advanceAutoTourNext() {
+    if (!isAutoTourRunning || isAutoTourPaused) return;
+
+    const step = activeTourData.steps[currentTourStepIndex];
+    const currentIndex = step.items.findIndex(i => i.num === currentTourItemNum);
+
+    if (currentIndex < step.items.length - 1) {
+      const nextItem = step.items[currentIndex + 1];
+      currentTourItemNum = nextItem.num;
+      executeCurrentAutoStep();
+    } else {
+      if (currentTourStepIndex < activeTourData.steps.length - 1) {
+        selectTourStep(currentTourStepIndex + 1);
+        const nextStep = activeTourData.steps[currentTourStepIndex];
+        currentTourItemNum = nextStep.items[0].num;
+        autoTourTimer = setTimeout(() => {
+          executeCurrentAutoStep();
+        }, 1400);
+      } else {
+        stopSpeech();
+        isAutoTourRunning = false;
+        isAutoTourPaused = false;
+        updateAutoTourUI();
+        if (avatarSpeechText) {
+          avatarSpeechText.textContent = "🎉 ¡Misión completada con éxito! Has recorrido todos los pasos del tour pedagógico de Física 11°.";
+        }
+        if ('speechSynthesis' in window && isVoiceEnabled) {
+          const finishMsg = new SpeechSynthesisUtterance("¡Misión completada con éxito! Has recorrido todos los pasos pedagógicos.");
+          if (selectedSpeechVoice) finishMsg.voice = selectedSpeechVoice;
+          window.speechSynthesis.speak(finishMsg);
+        }
+      }
+    }
+  }
+
+  if (btnAutoTour) {
+    btnAutoTour.addEventListener("click", () => {
+      if (isAutoTourRunning) {
+        pauseAutoTour();
+      } else {
+        startAutoTour();
+      }
+    });
+  }
+
+  if (btnAutoStop) {
+    btnAutoStop.addEventListener("click", stopAutoTour);
+  }
+
+  if (btnVoiceToggle) {
+    btnVoiceToggle.addEventListener("click", () => {
+      isVoiceEnabled = !isVoiceEnabled;
+      btnVoiceToggle.classList.toggle("active", isVoiceEnabled);
+      btnVoiceToggle.classList.toggle("muted", !isVoiceEnabled);
+      if (voiceToggleIcon) voiceToggleIcon.textContent = isVoiceEnabled ? "🔊" : "🔇";
+      if (!isVoiceEnabled) {
+        stopSpeech();
+      }
+    });
   }
 
   btnTourZoomReset.addEventListener("click", resetTourZoom);
