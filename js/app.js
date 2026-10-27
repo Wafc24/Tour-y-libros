@@ -497,7 +497,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       loadBook(bookToLoad, pageToLoad);
     } else if (mode === "tour") {
       const tourToLoad = options.tourId || activeTourId || "matematicas3";
-      loadTour(tourToLoad, options.stepIndex || 0);
+      const stepToLoad = options.stepIndex || 0;
+      const pageToLoad = options.pageNum || options.page || null;
+      loadTour(tourToLoad, stepToLoad, pageToLoad);
     }
   }
 
@@ -608,14 +610,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           const bookId = btn.getAttribute("data-book-id");
           setAppMode("flipbook", { bookId, page: 1 });
         } else if (action === "open-tour" || action === "open-linked-tour") {
-          const tourId = btn.getAttribute("data-tour-id");
-          if (tourId === "matematicas3" || tourId === "ms3") {
-            window.location.href = "presentacion.html";
-          } else if (tourId === "fisica11" || tourId === "ms11_t1" || tourId === "ms11_t2") {
-            window.location.href = "presentacion_fisica.html";
-          } else {
-            setAppMode("tour", { tourId, stepIndex: 0 });
-          }
+          let tourId = btn.getAttribute("data-tour-id");
+          if (tourId === "ms3") tourId = "matematicas3";
+          if (tourId === "ms11_t1" || tourId === "ms11_t2") tourId = "fisica11";
+          setAppMode("tour", { tourId, stepIndex: 0 });
         } else if (action === "open-book-at") {
           const bookId = btn.getAttribute("data-book-id");
           const page = parseInt(btn.getAttribute("data-page"), 10) || 1;
@@ -704,17 +702,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     updateCoverCentering(currentPageIndex);
 
-    // Sugerencia dinámica de Tour en las páginas correspondientes
+    // Sugerencia dinámica de Tour en las páginas correspondientes (interconexión bidireccional)
     if (currentBookId === "ms3" && pageNum >= 180 && pageNum <= 198) {
       flipbookTourSuggestion.style.display = "flex";
       suggestionIcon.textContent = "📐";
-      suggestionText.textContent = "Ver Tour Pedagógico: Matemáticas 3° (Fases)";
-      flipbookTourSuggestion.onclick = () => { window.location.href = "presentacion.html"; };
-    } else if (currentBookId === "ms11_t1" && pageNum >= 207 && pageNum <= 218) {
+      suggestionText.textContent = `Ver Tour Pedagógico: Matemáticas 3° (Pág. ${pageNum})`;
+      flipbookTourSuggestion.onclick = () => { setAppMode("tour", { tourId: "matematicas3", pageNum: pageNum }); };
+    } else if (currentBookId === "ms11_t1" && pageNum >= 208 && pageNum <= 218) {
       flipbookTourSuggestion.style.display = "flex";
       suggestionIcon.textContent = "⚛️";
-      suggestionText.textContent = "Ver Tour Pedagógico: Física 11° (Pasos E=mc²)";
-      flipbookTourSuggestion.onclick = () => { window.location.href = "presentacion_fisica.html"; };
+      suggestionText.textContent = `Ver Tour Pedagógico: Física 11° (Pág. ${pageNum})`;
+      flipbookTourSuggestion.onclick = () => { setAppMode("tour", { tourId: "fisica11", pageNum: pageNum }); };
     } else {
       flipbookTourSuggestion.style.display = "none";
     }
@@ -951,13 +949,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
       item.addEventListener("click", () => {
         closeTourMenu();
-        if (tour.id === "matematicas3") {
-          window.location.href = "presentacion.html";
-        } else if (tour.id === "fisica11") {
-          window.location.href = "presentacion_fisica.html";
-        } else {
-          loadTour(tour.id, 0);
-        }
+        setAppMode("tour", { tourId: tour.id, stepIndex: 0 });
       });
       toursMenuGrid.appendChild(item);
     });
@@ -981,7 +973,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  function loadTour(tourId, stepIndex = 0) {
+  function loadTour(tourId, stepIndex = 0, targetPageNum = null) {
     activeTourData = toursCatalog.find((t) => t.id === tourId) || toursCatalog[0];
     if (!activeTourData) return;
     activeTourId = activeTourData.id;
@@ -1011,9 +1003,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.title = `${activeTourData.title} - Tour Pedagógico`;
     history.replaceState(null, "", `#tour/${activeTourData.id}`);
 
+    // Si viene con página objetivo, buscar en qué paso se encuentra
+    let resolvedStepIndex = stepIndex;
+    if (targetPageNum) {
+      const foundIdx = activeTourData.steps.findIndex(s => s.pages.some(p => p.pageNumber === targetPageNum));
+      if (foundIdx !== -1) resolvedStepIndex = foundIdx;
+    }
+
     // Renderizar selector de Fases / Pasos
     renderTourStepsStepper();
-    selectTourStep(stepIndex);
+    selectTourStep(resolvedStepIndex, targetPageNum);
   }
 
   function renderTourStepsStepper() {
@@ -1063,7 +1062,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
   }
 
-  function selectTourStep(stepIndex) {
+  function selectTourStep(stepIndex, targetPageNum = null) {
     currentTourStepIndex = stepIndex;
     const step = activeTourData.steps[stepIndex];
 
@@ -1085,9 +1084,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderTourSubtabs(step.pages);
     renderTourPointsChips(step.items);
 
-    const firstPage = step.pages[0].pageNumber;
-    const firstItem = step.items[0];
-    switchTourPage(firstPage, firstItem ? firstItem.num : 1);
+    const firstPage = targetPageNum && step.pages.some(p => p.pageNumber === targetPageNum)
+      ? targetPageNum
+      : step.pages[0].pageNumber;
+    const targetItem = step.items.find(i => i.pageNumber === firstPage) || step.items[0];
+    switchTourPage(firstPage, targetItem ? targetItem.num : 1);
   }
 
   function renderTourSubtabs(pages) {
@@ -1185,11 +1186,72 @@ document.addEventListener("DOMContentLoaded", async () => {
   let autoTourTimer = null;
   let selectedSpeechVoice = null;
 
+  function getBestNaturalSpanishVoice(voices) {
+    if (!voices || voices.length === 0) return null;
+
+    const esVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("es"));
+    if (esVoices.length === 0) return voices[0];
+
+    const scoreVoice = (v) => {
+      const name = (v.name || "").toLowerCase();
+      const lang = (v.lang || "").toLowerCase();
+      let score = 0;
+
+      // 1. Prioridad Máxima: Voces Neuronales Naturales de última generación (Edge / Windows / Chrome)
+      if (name.includes("natural")) score += 120;
+      if (name.includes("neural")) score += 120;
+      if (name.includes("online (natural)")) score += 140;
+      if (name.includes("enhanced")) score += 90;
+      if (name.includes("studio")) score += 90;
+
+      // 2. Voces Google Neural (Chrome)
+      if (name.includes("google") && name.includes("español")) score += 70;
+      else if (name.includes("google")) score += 45;
+
+      // 3. Voces de locutores y locutoras naturales preferidas en español
+      if (/salome|gonzalo|jorge|dalia|alvaro|elvira|paloma|camila|mateo|paulina/.test(name)) score += 40;
+
+      // 4. Dialectos preferentes (Colombia, México, Latam, España)
+      if (lang === "es-co" || name.includes("colombia")) score += 30;
+      if (lang === "es-mx" || name.includes("mexico")) score += 25;
+      if (lang === "es-419" || name.includes("latam")) score += 25;
+      if (lang === "es-es") score += 15;
+
+      // 5. Penalización estricta a voces robóticas sintéticas antiguas (SAPI5 Desktop)
+      if (name.includes("desktop")) score -= 80;
+      if (name.includes("sapi")) score -= 90;
+      if (name.includes("helena desktop") || name.includes("sabina desktop") || name.includes("raul desktop")) score -= 120;
+
+      return score;
+    };
+
+    esVoices.sort((a, b) => scoreVoice(b) - scoreVoice(a));
+    return esVoices[0];
+  }
+
+  function formatVoiceDisplayName(voice) {
+    if (!voice) return "Voz Lista";
+    const name = voice.name || "";
+    const cleanName = name
+      .replace(/Microsoft /i, "")
+      .replace(/Online \(Natural\)/i, "")
+      .replace(/- Spanish.*/i, "")
+      .replace(/Spanish.*/i, "")
+      .replace(/Desktop/i, "")
+      .trim();
+    const isNeural = /natural|neural|online|enhanced|google|studio/i.test(name);
+    return isNeural ? `Voz IA: ${cleanName || 'Natural'}` : "Voz Lista";
+  }
+
   function initSpeechVoices() {
     if (!('speechSynthesis' in window)) return;
     const updateVoices = () => {
       const voices = window.speechSynthesis.getVoices();
-      selectedSpeechVoice = voices.find(v => v.lang && (v.lang.startsWith("es-") || v.lang === "es")) || voices[0];
+      selectedSpeechVoice = getBestNaturalSpanishVoice(voices);
+      if (avatarVoiceStatePill && selectedSpeechVoice) {
+        avatarVoiceStatePill.textContent = formatVoiceDisplayName(selectedSpeechVoice);
+        avatarVoiceStatePill.title = `Motor de voz: ${selectedSpeechVoice.name} (${selectedSpeechVoice.lang})`;
+      }
     };
     updateVoices();
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
@@ -1220,9 +1282,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       tourAvatarNarrator.classList.toggle("speaking", isSpeaking);
     }
     if (avatarVoiceStatePill) {
-      avatarVoiceStatePill.textContent = isSpeaking ? "Narrando..." : (isVoiceEnabled ? "Voz Activa" : "Silenciado");
-      avatarVoiceStatePill.style.color = isSpeaking ? "var(--color-yellow)" : "";
-      avatarVoiceStatePill.style.borderColor = isSpeaking ? "var(--color-yellow)" : "";
+      if (isSpeaking) {
+        avatarVoiceStatePill.textContent = "Narrando...";
+        avatarVoiceStatePill.style.color = "var(--color-yellow)";
+        avatarVoiceStatePill.style.borderColor = "var(--color-yellow)";
+      } else {
+        avatarVoiceStatePill.textContent = isVoiceEnabled ? formatVoiceDisplayName(selectedSpeechVoice) : "Silenciado";
+        avatarVoiceStatePill.style.color = "";
+        avatarVoiceStatePill.style.borderColor = "";
+      }
     }
   }
 
@@ -1256,8 +1324,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const utterance = new SpeechSynthesisUtterance(speechText);
     if (selectedSpeechVoice) utterance.voice = selectedSpeechVoice;
     utterance.lang = selectedSpeechVoice ? selectedSpeechVoice.lang : "es-ES";
-    utterance.rate = 0.98;
-    utterance.pitch = 1.02;
+    // Calibración acústica para modelos neuronales naturales (sin distorsión de pitch)
+    utterance.rate = 0.96;
+    utterance.pitch = 1.0;
 
     utterance.onstart = () => {
       setAvatarSpeaking(true);
@@ -1268,7 +1337,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (isAutoTourRunning && !isAutoTourPaused) {
         autoTourTimer = setTimeout(() => {
           if (onCompleteCallback) onCompleteCallback();
-        }, 1600);
+        }, 1500);
       }
     };
 
@@ -1623,11 +1692,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!rawHash || rawHash === "hub") {
       setAppMode("hub");
     } else if (rawHash.startsWith("tour/")) {
-      const tourId = rawHash.replace("tour/", "");
-      setAppMode("tour", { tourId });
-    } else if (rawHash.startsWith("revista/")) {
-      const bookId = rawHash.replace("revista/", "");
-      setAppMode("flipbook", { bookId });
+      const parts = rawHash.replace("tour/", "").split("/");
+      const tourId = parts[0];
+      const pageNum = parts[1] ? parseInt(parts[1], 10) : null;
+      setAppMode("tour", { tourId, pageNum });
+    } else if (rawHash.startsWith("revista/") || rawHash.startsWith("flipbook/")) {
+      const parts = rawHash.replace(/^(revista|flipbook)\//, "").split("/");
+      const bookId = parts[0];
+      const page = parts[1] ? parseInt(parts[1], 10) : 1;
+      setAppMode("flipbook", { bookId, page });
     } else if (booksLibrary.some(b => b.id === rawHash)) {
       setAppMode("flipbook", { bookId: rawHash });
     } else {
