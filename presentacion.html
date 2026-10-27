@@ -549,6 +549,66 @@
       transform: scale(1.08);
     }
 
+    .avatar-box.speaking .avatar-halo {
+      box-shadow: 0 0 32px rgba(255, 140, 0, 0.85), 0 0 18px rgba(0, 240, 255, 0.85);
+      animation: avatarPulseGlow 1.2s infinite alternate ease-in-out;
+    }
+
+    @keyframes avatarPulseGlow {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(239, 96, 38, 0.6);
+      }
+      100% {
+        transform: scale(1.06);
+        box-shadow: 0 0 35px rgba(255, 170, 0, 0.95), 0 0 25px rgba(0, 230, 255, 0.75);
+      }
+    }
+
+    .avatar-voice-pill {
+      font-size: 0.65rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #94a3b8;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .avatar-box.speaking .avatar-voice-pill {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(52, 211, 153, 0.6);
+      color: #34d399;
+    }
+
+    .btn-voice-toggle {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-voice-toggle:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .btn-voice-toggle.muted {
+      opacity: 0.6;
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
     .avatar-name {
       font-size: 0.86rem;
       font-weight: 800;
@@ -855,12 +915,13 @@
 
         <!-- Fila de Avatar y Diálogo -->
         <div class="avatar-dialogue-row">
-          <div class="avatar-box">
+          <div class="avatar-box" id="avatar-box">
             <div class="avatar-halo">
               <img id="avatar-img" class="avatar-img" src="assets/avatar_nino.png" alt="Avatar Astronauta" onerror="this.src='avatar_nino.png'">
             </div>
             <div class="avatar-name" id="avatar-name">Comandante Leo</div>
             <div class="avatar-role" id="avatar-role">Guía de Misión</div>
+            <span class="avatar-voice-pill" id="avatar-voice-pill" title="Voz IA en español">Voz Lista</span>
           </div>
 
           <div class="dialogue-card">
@@ -880,7 +941,15 @@
             <span>&larr;</span> Anterior
           </button>
 
-          <button class="btn-autoplay" id="btn-autoplay" title="Avanzar automáticamente cada 6.5 segundos">
+          <button class="btn-voice-toggle" id="btn-voice-toggle" title="Activar o silenciar narración con voz IA">
+            <span id="voice-toggle-icon">🔊</span> Voz
+          </button>
+
+          <a id="btn-nav-to-revista" href="index.html#flipbook/ms3/180" class="btn-voice-toggle" style="text-decoration: none;" title="Abrir esta misma página en la Revista Digital">
+            <span>📖 Revista</span>
+          </a>
+
+          <button class="btn-autoplay" id="btn-autoplay" title="Avanzar automáticamente">
             <span id="autoplay-icon">▶</span> Tour Automático
           </button>
 
@@ -933,8 +1002,8 @@
           {
             num: 1,
             pageNumber: 180,
-            top: 42,
-            left: 20,
+            top: 32.5,
+            left: 8.9,
             shortLabel: "1. Título de Misión",
             title: "1. El Título de Misión (Activando el sistema de navegación matemático)",
             text: "Rompe con el esquema tradicional de 'Unidad 1'. Convierte la clase de matemáticas en una misión espacial donde el estudiante es el protagonista (comandante)."
@@ -942,8 +1011,8 @@
           {
             num: 2,
             pageNumber: 180,
-            top: 45,
-            left: 54,
+            top: 45.0,
+            left: 19.5,
             shortLabel: "2. ¿Cuál es nuestro desafío?",
             title: "2. ¿Cuál es nuestro desafío?",
             text: "Presenta el problema a resolver. Conecta las matemáticas con situaciones concretas (organizar información, reconocer patrones, analizar señales) en lugar de presentar números aislados."
@@ -951,8 +1020,8 @@
           {
             num: 3,
             pageNumber: 180,
-            top: 65,
-            left: 54,
+            top: 63.5,
+            left: 19.5,
             shortLabel: "3. Reto de la Misión",
             title: "3. Reto de la Misión",
             text: "Es el objetivo de aprendizaje planteado como una meta alcanzable (crear un mapa del planeta usando datos y patrones). Le da sentido a todo lo que se hará en la unidad."
@@ -960,8 +1029,8 @@
           {
             num: 4,
             pageNumber: 180,
-            top: 80,
-            left: 33,
+            top: 80.5,
+            left: 55.0,
             shortLabel: "4. Cápsula ECO",
             title: "4. Cápsula ECO",
             text: "Espacio vital para la educación socioemocional. En matemáticas, la frustración es común. Aquí se enseña a identificar emociones y valorar las ideas de los compañeros al resolver problemas."
@@ -969,8 +1038,8 @@
           {
             num: 5,
             pageNumber: 180,
-            top: 80,
-            left: 10,
+            top: 88.0,
+            left: 10.0,
             shortLabel: "5. Conexión Space-Gec",
             title: "5. Conexión Space-Gec",
             text: "Integración inmediata del ecosistema digital. El estudiante es invitado a ampliar la narrativa espacial mediante un video interactivo, uniendo el libro físico con la plataforma."
@@ -978,8 +1047,8 @@
           {
             num: 6,
             pageNumber: 181,
-            top: 20,
-            left: 35,
+            top: 14.5,
+            left: 6.8,
             shortLabel: "6. Actividad Diagnóstico",
             title: "6. Actividad Diagnóstico (Despegamos... ¿Qué sabemos?)",
             text: "No es un examen punitivo. Es un 'calentamiento' cognitivo (ej. comparar y ordenar números en meteoritos) para que el docente identifique cómo llegan los estudiantes."
@@ -987,8 +1056,8 @@
           {
             num: 7,
             pageNumber: 181,
-            top: 52,
-            left: 30,
+            top: 45.5,
+            left: 6.8,
             shortLabel: "7. Diccionario de la Misión",
             title: "7. Diccionario de la Misión",
             text: "Estandarización del lenguaje matemático. Conceptos clave (número, patrón, secuencia) definidos de forma sencilla para que todos hablen el mismo idioma durante la misión."
@@ -996,8 +1065,8 @@
           {
             num: 8,
             pageNumber: 181,
-            top: 48,
-            left: 74,
+            top: 41.0,
+            left: 49.0,
             shortLabel: "8. Navegando por la Misión",
             title: "8. Navegando por la Misión",
             text: "Un mapa de ruta. Le explica al estudiante (y al docente) qué pasará en cada una de las 4 fases de la unidad, promoviendo la autonomía y la organización."
@@ -1027,8 +1096,8 @@
           {
             num: 1,
             pageNumber: 182,
-            top: 28,
-            left: 50,
+            top: 17.5,
+            left: 7.5,
             shortLabel: "1. Pilota tu conocimiento",
             title: "1. Pilota tu conocimiento (Las 4 Reglas de Oro)",
             text: "Enseña el 'cómo pensar':\n• Lupa (Identifica): Comprender qué pide el problema.\n• Brújula (Rastrea): Buscar los datos útiles (números, patrones).\n• Cerebro (Activa): Elegir la operación o estrategia matemática adecuada.\n• Aterrizaje (Responde): Comprobar la respuesta y argumentar por qué es correcta."
@@ -1036,8 +1105,8 @@
           {
             num: 2,
             pageNumber: 182,
-            top: 64,
-            left: 50,
+            top: 53.0,
+            left: 7.5,
             shortLabel: "2. Punto de Control Modelado",
             title: "2. Punto de Control Modelado",
             text: "No se le pide al estudiante que resuelva solo todavía. El libro le muestra un ítem real (una secuencia numérica) y desglosa frente a él cómo se aplican los 4 pasos anteriores para llegar a la respuesta correcta de forma estructurada."
@@ -1047,14 +1116,20 @@
       {
         id: "fase3",
         name: "Fase 3: Exploración de la Misión",
-        badge: "Fase 3 • Exploración de la Misión (Págs. 183 y 195)",
+        badge: "Fase 3 • Exploración de la Misión (Págs. 183, 184 y 195)",
         purpose: "Desarrollo del componente disciplinar mediante la conceptualización, la práctica (taller) y la evaluación formativa.",
         pages: [
           {
             pageNumber: 183,
             imageSrc: "Page/page_183.jpg",
             fallbackSrc: "pages/page_183.jpg",
-            label: "Pág. 183 (Puntos 1 al 6)"
+            label: "Pág. 183 (Puntos 1 al 4)"
+          },
+          {
+            pageNumber: 184,
+            imageSrc: "Page/page_184.jpg",
+            fallbackSrc: "pages/page_184.jpg",
+            label: "Pág. 184 (Puntos 5 y 6)"
           },
           {
             pageNumber: 195,
@@ -1073,8 +1148,8 @@
           {
             num: 1,
             pageNumber: 183,
-            top: 15,
-            left: 24,
+            top: 15.0,
+            left: 7.0,
             shortLabel: "1. Numérico - Variacional",
             title: "1. Numérico - Variacional",
             text: "Identificación clara del componente evaluado por el ICFES que se está trabajando."
@@ -1082,8 +1157,8 @@
           {
             num: 2,
             pageNumber: 183,
-            top: 32,
-            left: 36,
+            top: 21.0,
+            left: 60.0,
             shortLabel: "2. Observando el Planeta",
             title: "2. Observando el Planeta (Conceptualización)",
             text: "La teoría matemática no es árida; se presenta integrada a la narrativa de la misión (ej. el extraterrestre que compara cantidades de cristales de energía)."
@@ -1091,8 +1166,8 @@
           {
             num: 3,
             pageNumber: 183,
-            top: 56,
-            left: 28,
+            top: 50.5,
+            left: 6.5,
             shortLabel: "3. Punto de Control",
             title: "3. Punto de Control",
             text: "Una pregunta tipo Saber intercalada en el aprendizaje. Exige que el estudiante aplique lo aprendido de inmediato y justifique su respuesta, fomentando la argumentación matemática (Competencia: Formulación y Ejecución / Argumentación)."
@@ -1100,26 +1175,26 @@
           {
             num: 4,
             pageNumber: 183,
-            top: 53,
-            left: 72,
+            top: 51.0,
+            left: 50.0,
             shortLabel: "4. Manos a la obra",
             title: "4. Manos a la obra",
             text: "La sección práctica de la clase. Ejercicios donde el estudiante actúa como 'detective' o constructor, aplicando la suma, la multiplicación o la comparación de números con objetos tangibles (tapas, semillas)."
           },
           {
             num: 5,
-            pageNumber: 183,
-            top: 86,
-            left: 72,
+            pageNumber: 184,
+            top: 8.0,
+            left: 6.5,
             shortLabel: "5. Laboratorio en Casa",
             title: "5. Laboratorio en Casa",
             text: "Extiende el aprendizaje fuera del aula, involucrando a la familia con materiales cotidianos (recipientes y semillas) para afianzar conceptos como la adición."
           },
           {
             num: 6,
-            pageNumber: 183,
-            top: 88,
-            left: 32,
+            pageNumber: 184,
+            top: 78.5,
+            left: 6.0,
             shortLabel: "6. Datos de la Misión",
             title: "6. Datos de la Misión",
             text: "Datos curiosos que conectan la matemática abstracta con el mundo real o el contexto espacial (ej. cómo los astronautas gestionan recursos sumando cantidades)."
@@ -1127,8 +1202,8 @@
           {
             num: 7,
             pageNumber: 195,
-            top: 13,
-            left: 50,
+            top: 4.5,
+            left: 6.5,
             shortLabel: "7. Punto de Control Reforzado",
             title: "7. Punto de Control Reforzado (Pág. 195)",
             text: "Batería de 7 preguntas tipo Saber (opción múltiple) al final de la fase 3. Evalúan los aprendizajes acumulados, marcando explícitamente qué competencia miden (Interpretación y Representación, Formulación y Ejecución, Argumentación)."
@@ -1164,8 +1239,8 @@
           {
             num: 1,
             pageNumber: 196,
-            top: 36,
-            left: 45,
+            top: 32.5,
+            left: 8.5,
             shortLabel: "1. Proyecto final",
             title: "1. Proyecto final",
             text: "Se menciona la socialización en la plataforma digital. Es el espacio para que el trabajo individual se convierta en una construcción colectiva."
@@ -1173,8 +1248,8 @@
           {
             num: 2,
             pageNumber: 196,
-            top: 58,
-            left: 45,
+            top: 55.0,
+            left: 9.5,
             shortLabel: "2. Prueba de Campo (10 preguntas)",
             title: "2. Prueba de Campo (10 preguntas)",
             text: "Un mini-simulacro riguroso diseñado bajo la Estructura Basada en Evidencias (EBE) del ICFES. El estudiante se enfrenta a un cuadernillo real donde debe rellenar óvalos, manejando tiempos y lectura de contextos matemáticos."
@@ -1182,8 +1257,8 @@
           {
             num: 3,
             pageNumber: 198,
-            top: 68,
-            left: 52,
+            top: 64.0,
+            left: 41.0,
             shortLabel: "3. Conexión SpaceGec (Profundización)",
             title: "3. Conexión SpaceGec (Profundización)",
             text: "El libro físico llega a su límite, pero el aprendizaje continúa. Se remite al estudiante a la plataforma para resolver 15 preguntas adicionales, generando analítica de datos para el docente."
@@ -1191,8 +1266,8 @@
           {
             num: 4,
             pageNumber: 198,
-            top: 82,
-            left: 50,
+            top: 81.5,
+            left: 11.5,
             shortLabel: "4. Finalización de la Misión",
             title: "4. Finalización de la Misión",
             text: "Un cierre narrativo que celebra el esfuerzo del estudiante y lo deja en suspenso y motivado para el próximo desafío (la siguiente misión/unidad)."
@@ -1237,15 +1312,48 @@
         this.stepCounter = document.getElementById("step-counter");
         this.phaseButtons = document.querySelectorAll(".phase-btn");
 
+        // Elementos de Voz IA y Avatar
+        this.avatarBox = document.getElementById("avatar-box");
+        this.avatarVoicePill = document.getElementById("avatar-voice-pill");
+        this.btnVoiceToggle = document.getElementById("btn-voice-toggle");
+        this.voiceToggleIcon = document.getElementById("voice-toggle-icon");
+        this.isVoiceEnabled = true;
+        this.selectedSpeechVoice = null;
+        this.speechUtterance = null;
+
         this.init();
       }
 
       init() {
         this.bindEvents();
+        this.initSpeech();
         this.loadPhase(0);
       }
 
       bindEvents() {
+        // Botón Activar / Silenciar Voz IA
+        if (this.btnVoiceToggle) {
+          this.btnVoiceToggle.addEventListener("click", () => {
+            this.isVoiceEnabled = !this.isVoiceEnabled;
+            this.btnVoiceToggle.classList.toggle("muted", !this.isVoiceEnabled);
+            if (this.voiceToggleIcon) {
+              this.voiceToggleIcon.textContent = this.isVoiceEnabled ? "🔊" : "🔇";
+            }
+            if (!this.isVoiceEnabled) {
+              this.stopSpeech();
+              if (this.avatarVoicePill) {
+                this.avatarVoicePill.textContent = "Silenciada";
+              }
+            } else {
+              if (this.avatarVoicePill && this.selectedSpeechVoice) {
+                this.avatarVoicePill.textContent = this.formatVoiceDisplayName(this.selectedSpeechVoice);
+              }
+              const phase = this.getCurrentPhase();
+              const item = phase.items.find(i => i.num === this.activeItemNum);
+              if (item) this.speak(item.title, item.text);
+            }
+          });
+        }
         // Navegación por fases
         this.phaseButtons.forEach((btn) => {
           btn.addEventListener("click", (e) => {
@@ -1382,6 +1490,12 @@
 
         this.panelPageNum.textContent = `Página ${pageNumber} del libro`;
         this.panelFaseBadge.innerHTML = `<span class="dot"></span> ${phase.badge}`;
+
+        const btnNavRevista = document.getElementById("btn-nav-to-revista");
+        if (btnNavRevista) {
+          btnNavRevista.href = `index.html#flipbook/ms3/${pageNumber}`;
+          btnNavRevista.title = `Abrir página ${pageNumber} en el Visor de Revista Digital`;
+        }
 
         // Renderizar puntos calientes de ESTA página específica
         this.renderHotspotsForPage(pageNumber);
@@ -1551,6 +1665,9 @@
         // Disparar el ciclo: Hoja completa -> Amplía sección -> Regresa a hoja completa
         this.triggerSectionInspection(item);
 
+        // Narración con voz neuronal natural
+        this.speak(item.title, item.text);
+
         // Actualizar contador y botones
         const currentItemIndex = phase.items.findIndex(i => i.num === itemNum);
         this.stepCounter.textContent = `Punto ${itemNum} de ${phase.items.length} (Fase ${this.currentPhaseIndex + 1})`;
@@ -1596,17 +1713,175 @@
         this.autoplayIcon.textContent = this.isAutoplaying ? "⏸" : "▶";
 
         if (this.isAutoplaying) {
-          this.startAutoplayTimer();
+          const phase = this.getCurrentPhase();
+          const item = phase.items.find(i => i.num === this.activeItemNum);
+          if (item) {
+            this.speak(item.title, item.text);
+          } else {
+            this.navigateGlobalItem(1);
+          }
         } else {
-          clearInterval(this.autoplayTimer);
+          clearTimeout(this.autoplayTimer);
+          this.stopSpeech();
         }
       }
 
-      startAutoplayTimer() {
-        clearInterval(this.autoplayTimer);
-        this.autoplayTimer = setInterval(() => {
-          this.navigateGlobalItem(1);
-        }, 7000); // 7 segundos por punto pedagógico
+      getBestNaturalSpanishVoice(voices) {
+        if (!voices || voices.length === 0) return null;
+
+        const esVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("es"));
+        if (esVoices.length === 0) return voices[0];
+
+        const scoreVoice = (v) => {
+          const name = (v.name || "").toLowerCase();
+          const lang = (v.lang || "").toLowerCase();
+          let score = 0;
+
+          // 1. Prioridad Máxima: Voces Neuronales Naturales (Edge / Windows / Chrome)
+          if (name.includes("natural")) score += 120;
+          if (name.includes("neural")) score += 120;
+          if (name.includes("online (natural)")) score += 140;
+          if (name.includes("enhanced")) score += 90;
+          if (name.includes("studio")) score += 90;
+
+          // 2. Voces Google Neural (Chrome)
+          if (name.includes("google") && name.includes("español")) score += 70;
+          else if (name.includes("google")) score += 45;
+
+          // 3. Voces de locutores y locutoras naturales preferidas en español
+          if (/salome|gonzalo|jorge|dalia|alvaro|elvira|paloma|camila|mateo|paulina/.test(name)) score += 40;
+
+          // 4. Dialectos preferentes (Colombia, México, Latam, España)
+          if (lang === "es-co" || name.includes("colombia")) score += 30;
+          if (lang === "es-mx" || name.includes("mexico")) score += 25;
+          if (lang === "es-419" || name.includes("latam")) score += 25;
+          if (lang === "es-es") score += 15;
+
+          // 5. Penalización estricta a voces robóticas de escritorio SAPI5 antiguas
+          if (name.includes("desktop")) score -= 80;
+          if (name.includes("sapi")) score -= 90;
+          if (name.includes("helena desktop") || name.includes("sabina desktop") || name.includes("raul desktop")) score -= 120;
+
+          return score;
+        };
+
+        esVoices.sort((a, b) => scoreVoice(b) - scoreVoice(a));
+        return esVoices[0];
+      }
+
+      formatVoiceDisplayName(voice) {
+        if (!voice) return "Voz Lista";
+        const name = voice.name || "";
+        const cleanName = name
+          .replace(/Microsoft /i, "")
+          .replace(/Online \(Natural\)/i, "")
+          .replace(/- Spanish.*/i, "")
+          .replace(/Spanish.*/i, "")
+          .replace(/Desktop/i, "")
+          .trim();
+        const isNeural = /natural|neural|online|enhanced|google|studio/i.test(name);
+        return isNeural ? `Voz IA: ${cleanName || 'Natural'}` : "Voz Lista";
+      }
+
+      initSpeech() {
+        if (!('speechSynthesis' in window)) {
+          if (this.avatarVoicePill) {
+            this.avatarVoicePill.textContent = "Modo Texto";
+          }
+          return;
+        }
+
+        const pickVoice = () => {
+          const voices = window.speechSynthesis.getVoices();
+          if (!voices || voices.length === 0) return;
+
+          this.selectedSpeechVoice = this.getBestNaturalSpanishVoice(voices);
+
+          if (this.avatarVoicePill && this.selectedSpeechVoice) {
+            this.avatarVoicePill.textContent = this.formatVoiceDisplayName(this.selectedSpeechVoice);
+            this.avatarVoicePill.title = `Motor de voz: ${this.selectedSpeechVoice.name} (${this.selectedSpeechVoice.lang})`;
+          }
+        };
+
+        pickVoice();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+          window.speechSynthesis.onvoiceschanged = pickVoice;
+        }
+      }
+
+      cleanTextForSpeech(text) {
+        if (!text) return "";
+        return text
+          .replace(/<[^>]+>/g, " ")
+          .replace(/Pág\.\s*/gi, "Página ")
+          .replace(/\$/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      setAvatarSpeaking(isSpeaking) {
+        if (!this.avatarBox) return;
+        this.avatarBox.classList.toggle("speaking", !!isSpeaking);
+        if (this.avatarVoicePill) {
+          if (isSpeaking) {
+            this.avatarVoicePill.textContent = "Narrando...";
+          } else {
+            this.avatarVoicePill.textContent = this.isVoiceEnabled ? this.formatVoiceDisplayName(this.selectedSpeechVoice) : "Silenciada";
+          }
+        }
+      }
+
+      stopSpeech() {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        this.setAvatarSpeaking(false);
+      }
+
+      speak(title, text) {
+        this.stopSpeech();
+        clearTimeout(this.autoplayTimer);
+
+        const speechText = `${this.cleanTextForSpeech(title)}. ${this.cleanTextForSpeech(text)}`;
+
+        if (!this.isVoiceEnabled || !('speechSynthesis' in window)) {
+          if (this.isAutoplaying) {
+            const simulatedTime = Math.max(3500, Math.min(8000, speechText.length * 35));
+            this.autoplayTimer = setTimeout(() => {
+              if (this.isAutoplaying) this.navigateGlobalItem(1);
+            }, simulatedTime);
+          }
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(speechText);
+        if (this.selectedSpeechVoice) utterance.voice = this.selectedSpeechVoice;
+        utterance.lang = this.selectedSpeechVoice ? this.selectedSpeechVoice.lang : "es-ES";
+        utterance.rate = 0.96;
+        utterance.pitch = 1.0;
+
+        utterance.onstart = () => {
+          this.setAvatarSpeaking(true);
+        };
+
+        utterance.onend = () => {
+          this.setAvatarSpeaking(false);
+          if (this.isAutoplaying) {
+            this.autoplayTimer = setTimeout(() => {
+              if (this.isAutoplaying) this.navigateGlobalItem(1);
+            }, 1200);
+          }
+        };
+
+        utterance.onerror = () => {
+          this.setAvatarSpeaking(false);
+          if (this.isAutoplaying) {
+            this.navigateGlobalItem(1);
+          }
+        };
+
+        this.speechUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
       }
     }
 
